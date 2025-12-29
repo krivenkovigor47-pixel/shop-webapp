@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium Shop</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <h1>🛍 Premium Shop</h1>
+            <p>Товары дешевле маркетплейсов!</p>
+        </header>
+
+        <div class="categories" id="categories"></div>
+        
+        <div class="search">
+            <input type="text" id="search" placeholder="🔍 Поиск...">
+        </div>
+
+        <div class="products" id="products"></div>
+
+        <div class="cart-btn" id="cart-btn" style="display:none;" onclick="openCart()">
+            <span id="cart-count">0</span>
+            <span>🛒</span>
+            <span id="cart-sum">0₽</span>
+        </div>
+
+        <div class="modal" id="modal">
+            <div class="modal-bg" onclick="closeModal()"></div>
+            <div class="modal-box" id="modal-box"></div>
+        </div>
+    </div>
+
+    <script src="products.json.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
