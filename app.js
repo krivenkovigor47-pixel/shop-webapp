@@ -144,10 +144,12 @@ function updateCartBtn() {
 }
 
 function openCart() {
-    const modal = document.getElementById('modal');
-    const box = document.getElementById('modal-box');
+    const container = document.querySelector('.app');
     
     if (!cart.length) {
+        const modal = document.getElementById('modal');
+        const box = document.getElementById('modal-box');
+        
         box.innerHTML = `
             <button class="modal-close" onclick="closeModal()">×</button>
             <div class="empty">
@@ -160,22 +162,7 @@ function openCart() {
         return;
     }
     
-    let itemsHtml = cart.map(i => {
-        const p = PRODUCTS_DATA.find(x => x.id === i.id);
-        if (!p) return '';
-        const price = Math.round(p.price * (1 - p.discount / 100));
-        return `
-            <div class="cart-item">
-                <img src="${p.image}" onerror="this.src='https://via.placeholder.com/60?text=?'">
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${p.name}</div>
-                    <div class="cart-item-price">${price}₽ × ${i.qty} = ${price * i.qty}₽</div>
-                </div>
-                <button class="cart-item-del" onclick="removeFromCart(${i.id})">×</button>
-            </div>
-        `;
-    }).join('');
-    
+    // Рассчитываем суммы
     const subtotal = cart.reduce((s, i) => {
         const p = PRODUCTS_DATA.find(x => x.id === i.id);
         return s + (p ? p.price * i.qty : 0);
@@ -188,30 +175,137 @@ function openCart() {
     
     const discount = subtotal - total;
     
-    box.innerHTML = `
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <h2 style="margin-bottom:20px;">🛒 Корзина</h2>
-        ${itemsHtml}
-        <div class="cart-total">
-            <div class="cart-row">
-                <span>Сумма</span>
+    // Формируем список товаров
+    let itemsHTML = cart.map(i => {
+        const p = PRODUCTS_DATA.find(x => x.id === i.id);
+        if (!p) return '';
+        
+        const price = Math.round(p.price * (1 - p.discount / 100));
+        const images = Array.isArray(p.images) ? p.images : [p.image];
+        
+        return `
+            <div class="cart-item">
+                <img src="${images[0]}" onerror="this.src='https://via.placeholder.com/70?text=?'">
+                <div class="cart-item-info">
+                    <div class="cart-item-name">${p.name}</div>
+                    <div class="cart-item-price">${price}₽ × ${i.qty} = ${price * i.qty}₽</div>
+                    <div class="cart-item-controls">
+                        <button class="cart-qty-btn" onclick="decreaseQty(${i.id})" ${i.qty <= 1 ? 'disabled' : ''}>−</button>
+                        <div class="cart-qty">${i.qty}</div>
+                        <button class="cart-qty-btn" onclick="increaseQty(${i.id})" ${i.qty >= 99 ? 'disabled' : ''}>+</button>
+                    </div>
+                </div>
+                <button class="cart-item-delete" onclick="removeFromCart(${i.id})">×</button>
+            </div>
+        `;
+    }).join('');
+    
+    // Сохраняем текущий HTML
+    const originalHTML = container.innerHTML;
+    
+    // Показываем корзину
+    container.innerHTML = `
+        <button class="back-btn" onclick="closeCartView()">←</button>
+        
+        <div class="cart-header">
+            <h1>🛒 Корзина</h1>
+            <p>Товаров: ${cart.reduce((s, i) => s + i.qty, 0)} шт</p>
+        </div>
+        
+        <div class="cart-content">
+            ${itemsHTML}
+        </div>
+        
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Сумма:</span>
                 <span>${subtotal}₽</span>
             </div>
-            <div class="cart-row">
-                <span>Скидка</span>
-                <span style="color:#4ade80;">-${discount}₽</span>
+            <div class="cart-summary-row">
+                <span>Скидка:</span>
+                <span style="color:#4ade80;">−${discount}₽</span>
             </div>
-            <div class="cart-row final">
-                <span>Итого</span>
+            <div class="cart-summary-row total">
+                <span>Итого:</span>
                 <span>${total}₽</span>
             </div>
+            
+            <div class="cart-actions">
+                <button class="cart-clear-btn" onclick="confirmClearCart()">🗑 Очистить</button>
+                <button class="cart-checkout" onclick="checkout()" style="flex:1;">
+                    💳 Оформить — ${total}₽
+                </button>
+            </div>
         </div>
-        <button class="cart-checkout" onclick="checkout()">
-            💬 Оформить заказ — ${total}₽
-        </button>
     `;
     
-    modal.classList.add('active');
+    // Сохраняем оригинальный HTML для возврата
+    window.originalAppHTML = originalHTML;
+    
+    if (tg.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+}
+
+// Закрыть корзину и вернуться в каталог
+function closeCartView() {
+    if (window.originalAppHTML) {
+        document.querySelector('.app').innerHTML = window.originalAppHTML;
+        
+        // Переинициализируем каталог
+        renderCategories();
+        renderProducts();
+        setupEvents();
+        updateCartBtn();
+    }
+    
+    if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+}
+
+// Увеличить количество
+function increaseQty(id) {
+    const item = cart.find(x => x.id === id);
+    if (item && item.qty < 99) {
+        item.qty++;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        openCart(); // Перерисовываем корзину
+        if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+}
+
+// Уменьшить количество
+function decreaseQty(id) {
+    const item = cart.find(x => x.id === id);
+    if (item && item.qty > 1) {
+        item.qty--;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        openCart(); // Перерисовываем корзину
+        if (tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+}
+
+// Подтверждение очистки корзины
+function confirmClearCart() {
+    if (confirm('Очистить всю корзину?')) {
+        cart = [];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        closeCartView();
+        updateCartBtn();
+        if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+    }
+}
+
+// Обновляем removeFromCart
+function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    if (cart.length === 0) {
+        closeCartView();
+    } else {
+        openCart(); // Перерисовываем корзину
+    }
+    
+    updateCartBtn();
+    if (tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 }
 
 function buyNow(id) {
@@ -261,3 +355,4 @@ function setupEvents() {
         renderProducts(e.target.value);
     });
 }
+
