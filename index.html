@@ -1442,8 +1442,18 @@
             <!-- Импорт/Экспорт -->
             <div id="tab-import" class="admin-tab" style="display:none;">
                 <div class="admin-section">
+                    <h3>🔗 Ссылка на магазин</h3>
+                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
+                        Ссылка с вашими настройками — отправьте её покупателям!<br>
+                        Все товары и настройки будут загружены автоматически.
+                    </p>
+                    <input type="text" class="admin-input" id="shop-link" readonly style="font-size:11px;">
+                    <button class="admin-btn admin-btn-success" onclick="copyShopLink()">📋 Скопировать ссылку</button>
+                </div>
+
+                <div class="admin-section">
                     <h3>📤 Экспорт JSON</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Скопируйте и отправьте боту для сохранения</p>
+                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Или скопируйте JSON для бота</p>
                     <textarea class="admin-textarea" id="export-json" readonly></textarea>
                     <button class="admin-btn admin-btn-primary" onclick="exportJSON()">📋 Скопировать JSON</button>
                 </div>
@@ -1482,9 +1492,15 @@
 
                 <div class="admin-section">
                     <h3>💬 Настройки связи</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Username для кнопки "Задать вопрос" (без @)</p>
+                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
+                        Username для кнопки "Задать вопрос" (без @)<br>
+                        <strong style="color:var(--red-solid);">⚠️ После сохранения — скопируйте новую ссылку в разделе "Импорт"!</strong>
+                    </p>
                     <input type="text" class="admin-input" id="contact-username" placeholder="username">
                     <button class="admin-btn admin-btn-primary" onclick="saveContactUsername()">💾 Сохранить</button>
+                    <p style="font-size:11px; color:var(--hint); margin-top:8px;">
+                        Текущий контакт: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;">@${CONTACT_USERNAME || 'не указан'}</code>
+                    </p>
                 </div>
 
                 <div class="admin-section">
@@ -1538,8 +1554,40 @@
     <script>
         // ==================== КОНФИГУРАЦИЯ ====================
         // 🔐 Ваш Telegram ID для доступа к админке
-        let ADMIN_IDS = JSON.parse(localStorage.getItem('adminIds') || '[1729711148]');
-        let CONTACT_USERNAME = localStorage.getItem('contactUsername') || '';
+        const DEFAULT_ADMIN_IDS = [1729711148];
+        const DEFAULT_CONTACT_USERNAME = 'Nikeproooooo'; // ← Ваш Telegram username
+        
+        // Загрузка настроек: сначала из URL, потом localStorage, потом дефолт
+        function getConfigFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                contact: params.get('contact'),
+                config: params.get('config') // base64 encoded JSON
+            };
+        }
+        
+        const urlConfig = getConfigFromURL();
+        
+        // Если есть config в URL — декодируем
+        let importedConfig = null;
+        if (urlConfig.config) {
+            try {
+                importedConfig = JSON.parse(atob(urlConfig.config));
+            } catch(e) {}
+        }
+        
+        let ADMIN_IDS = importedConfig?.adminIds || JSON.parse(localStorage.getItem('adminIds') || 'null') || DEFAULT_ADMIN_IDS;
+        let CONTACT_USERNAME = urlConfig.contact || importedConfig?.contactUsername || localStorage.getItem('contactUsername') || DEFAULT_CONTACT_USERNAME;
+        let PROMO_CODES = importedConfig?.promoCodes || JSON.parse(localStorage.getItem('promoCodes') || '{}');
+        let PRODUCTS_DATA = importedConfig?.products || JSON.parse(localStorage.getItem('products') || '[]');
+        
+        // Сохраняем импортированные данные
+        if (importedConfig) {
+            localStorage.setItem('adminIds', JSON.stringify(ADMIN_IDS));
+            localStorage.setItem('contactUsername', CONTACT_USERNAME);
+            localStorage.setItem('promoCodes', JSON.stringify(PROMO_CODES));
+            localStorage.setItem('products', JSON.stringify(PRODUCTS_DATA));
+        }
         
         // ==================== ДАННЫЕ ====================
         const CATEGORIES = [
@@ -1551,8 +1599,7 @@
             { id: "other", name: "📦 Другое" }
         ];
 
-        let PRODUCTS_DATA = JSON.parse(localStorage.getItem('products') || '[]');
-        let PROMO_CODES = JSON.parse(localStorage.getItem('promoCodes') || '{}');
+        // PRODUCTS_DATA и PROMO_CODES уже загружены выше
         
         // ==================== TELEGRAM ====================
         const tg = window.Telegram?.WebApp;
@@ -1672,7 +1719,11 @@
             const username = document.getElementById('contact-username').value.trim().replace('@', '');
             CONTACT_USERNAME = username;
             localStorage.setItem('contactUsername', username);
-            showToast('✅ Контакт сохранён!');
+            
+            // Обновляем ссылку с новыми настройками
+            generateExportJSON();
+            
+            showToast('✅ Контакт сохранён! Скопируйте новую ссылку в разделе "Импорт"');
             haptic('success');
         }
 
@@ -1864,7 +1915,7 @@
 
         function generateExportJSON() {
             const textarea = document.getElementById('export-json');
-            if (!textarea) return;
+            const linkInput = document.getElementById('shop-link');
             
             const exportData = {
                 products: PRODUCTS_DATA,
@@ -1872,7 +1923,36 @@
                 adminIds: ADMIN_IDS,
                 contactUsername: CONTACT_USERNAME
             };
-            textarea.value = JSON.stringify(exportData, null, 2);
+            
+            if (textarea) {
+                textarea.value = JSON.stringify(exportData, null, 2);
+            }
+            
+            // Генерируем ссылку с настройками
+            if (linkInput) {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const configBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(exportData))));
+                linkInput.value = `${baseUrl}?config=${configBase64}`;
+            }
+        }
+        
+        function copyShopLink() {
+            const linkInput = document.getElementById('shop-link');
+            if (!linkInput || !linkInput.value) {
+                showToast('❌ Сначала добавьте товары!');
+                haptic('error');
+                return;
+            }
+            
+            navigator.clipboard.writeText(linkInput.value).then(() => {
+                showToast('✅ Ссылка скопирована!');
+                haptic('success');
+            }).catch(() => {
+                linkInput.select();
+                document.execCommand('copy');
+                showToast('✅ Ссылка скопирована!');
+                haptic('success');
+            });
         }
 
         function exportJSON() {
@@ -2684,3 +2764,6 @@
     </script>
 </body>
 </html>
+</body>
+</html>
+
