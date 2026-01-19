@@ -1219,6 +1219,77 @@
             font-family: monospace;
         }
 
+        /* ========== ЗАГРУЗКА ФОТО ========== */
+        .photo-upload {
+            margin-bottom: 12px;
+        }
+
+        .photo-preview {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: var(--bg);
+        }
+
+        .photo-preview:hover {
+            border-color: var(--accent-solid);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .photo-preview.has-photo {
+            border-style: solid;
+            border-color: var(--green-solid);
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            text-align: center;
+            color: var(--hint);
+        }
+
+        .photo-placeholder p {
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .photo-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .photo-actions button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-change {
+            background: var(--bg2);
+            color: var(--text);
+        }
+
+        .photo-remove {
+            background: rgba(255,107,107,0.2);
+            color: var(--red-solid);
+        }
+
         /* ========== ТАБЫ ========== */
         .tabs {
             display: flex;
@@ -1394,44 +1465,60 @@
                 <button class="tab-btn active" onclick="switchTab('add')">➕ Добавить</button>
                 <button class="tab-btn" onclick="switchTab('list')">📋 Товары</button>
                 <button class="tab-btn" onclick="switchTab('import')">📥 Импорт</button>
-                <button class="tab-btn" onclick="switchTab('settings')">⚙️ Настройки</button>
+                <button class="tab-btn" onclick="switchTab('promo')">⏰ Акции</button>
             </div>
 
-            <!-- Добавление товара -->
-            <div id="tab-add" class="admin-tab">
+            <!-- Добавить товар -->
+            <div id="tab-add" class="admin-tab" style="display:block;">
                 <div class="admin-section">
-                    <h3>➕ Добавить товар</h3>
-                    <input type="text" class="admin-input" id="p-name" placeholder="Название товара">
-                    <input type="text" class="admin-input" id="p-image" placeholder="Ссылка на фото (URL)">
-                    <input type="text" class="admin-input" id="p-images" placeholder="Доп. фото через запятую (URL, URL, ...)">
-                    <div class="admin-row">
-                        <input type="number" class="admin-input" id="p-price" placeholder="Цена ₽">
-                        <input type="number" class="admin-input" id="p-discount" placeholder="Скидка %" value="10">
+                    <h3>📸 Фото товара</h3>
+                    <div class="photo-upload" id="photo-upload">
+                        <input type="file" id="product-photo" accept="image/*" onchange="handlePhotoUpload(event)" style="display:none;">
+                        <div class="photo-preview" id="photo-preview" onclick="document.getElementById('product-photo').click()">
+                            <div class="photo-placeholder">
+                                <span style="font-size:48px;">📷</span>
+                                <p>Нажмите чтобы загрузить фото</p>
+                                <p style="font-size:11px;opacity:0.7;">JPG, PNG до 2MB</p>
+                            </div>
+                        </div>
                     </div>
-                    <select class="admin-input" id="p-category">
+                </div>
+
+                <div class="admin-section">
+                    <h3>📝 Информация о товаре</h3>
+                    <input type="text" class="admin-input" id="new-name" placeholder="Название товара *">
+                    <textarea class="admin-textarea" id="new-desc" placeholder="Описание товара *" style="min-height:80px;"></textarea>
+                    <input type="number" class="admin-input" id="new-price" placeholder="Цена ₽ *">
+                    <select class="admin-input" id="new-category">
                         <option value="electronics">📱 Электроника</option>
                         <option value="clothes">👕 Одежда</option>
                         <option value="home">🏠 Дом</option>
                         <option value="entertainment">🎮 Развлечения</option>
                         <option value="other">📦 Другое</option>
                     </select>
-                    <select class="admin-input" id="p-badge">
-                        <option value="">Без метки</option>
-                        <option value="hit">🔥 Хит продаж</option>
-                        <option value="new">🆕 Новинка</option>
-                        <option value="low">⚡ Мало осталось</option>
-                    </select>
-                    <textarea class="admin-input" id="p-desc" placeholder="Описание товара" style="min-height:60px;"></textarea>
-                    <div class="admin-row">
-                        <input type="number" class="admin-input" id="p-rating" placeholder="Рейтинг" value="4.8" step="0.1" min="1" max="5">
-                        <input type="number" class="admin-input" id="p-sold" placeholder="Продано" value="100">
-                    </div>
-                    <button class="admin-btn admin-btn-success" onclick="addProduct()">✅ Добавить товар</button>
+                </div>
+
+                <div class="admin-section">
+                    <button class="admin-btn admin-btn-success" onclick="generateProductCode()">📋 Сгенерировать код товара</button>
+                </div>
+
+                <div class="admin-section" id="generated-code-section" style="display:none;">
+                    <h3>📦 Код товара (скопируйте)</h3>
+                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
+                        Скопируйте этот код и добавьте в массив PRODUCTS_DATA в index.html
+                    </p>
+                    <textarea class="admin-textarea" id="generated-code" readonly style="min-height:200px;font-size:11px;"></textarea>
+                    <button class="admin-btn admin-btn-primary" onclick="copyGeneratedCode()">📋 Скопировать код</button>
+                    <button class="admin-btn admin-btn-success" onclick="addProductDirectly()" style="margin-top:8px;">➕ Добавить сразу в магазин</button>
+                    <p style="font-size:11px; color:var(--hint); margin-top:8px;">
+                        ⚠️ "Добавить сразу" — товар появится, но пропадёт после обновления страницы. Чтобы сохранить навсегда — вставьте код в файл.
+                    </p>
                 </div>
             </div>
 
             <!-- Список товаров -->
             <div id="tab-list" class="admin-tab" style="display:none;">
+
                 <div class="admin-section">
                     <h3>📋 Список товаров (<span id="products-count">0</span>)</h3>
                     <div class="admin-products-list" id="admin-products-list"></div>
@@ -1471,36 +1558,13 @@
                 </div>
             </div>
 
-            <!-- Настройки -->
-            <div id="tab-settings" class="admin-tab" style="display:none;">
-                <div class="admin-section">
-                    <h3>🔐 Настройки доступа</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
-                        Добавьте Telegram ID админов (через запятую).<br>
-                        Ваш ID: <code id="my-tg-id">—</code>
-                    </p>
-                    <input type="text" class="admin-input" id="admin-ids" placeholder="123456789, 987654321">
-                    <button class="admin-btn admin-btn-primary" onclick="saveAdminIds()">💾 Сохранить</button>
-                </div>
-
+            <!-- Акции и промокоды -->
+            <div id="tab-promo" class="admin-tab" style="display:none;">
                 <div class="admin-section">
                     <h3>🏷 Промокоды</h3>
                     <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Формат: КОД:СКИДКА% (каждый с новой строки)</p>
                     <textarea class="admin-textarea" id="promo-codes" placeholder="SALE10:10&#10;VIP20:20&#10;MEGA30:30"></textarea>
                     <button class="admin-btn admin-btn-primary" onclick="savePromoCodes()">💾 Сохранить промокоды</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>💬 Настройки связи</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
-                        Username для кнопки "Задать вопрос" (без @)<br>
-                        <strong style="color:var(--red-solid);">⚠️ После сохранения — скопируйте новую ссылку в разделе "Импорт"!</strong>
-                    </p>
-                    <input type="text" class="admin-input" id="contact-username" placeholder="username">
-                    <button class="admin-btn admin-btn-primary" onclick="saveContactUsername()">💾 Сохранить</button>
-                    <p style="font-size:11px; color:var(--hint); margin-top:8px;">
-                        Текущий контакт: <code style="background:var(--bg);padding:2px 6px;border-radius:4px;">@${CONTACT_USERNAME || 'не указан'}</code>
-                    </p>
                 </div>
 
                 <div class="admin-section">
@@ -1628,6 +1692,8 @@
         let currentGalleryIndex = 0;
         let searchTimeout = null;
         let currentProductId = null;
+        let uploadedPhotoBase64 = null;
+        let generatedProduct = null;
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         document.addEventListener('DOMContentLoaded', () => {
@@ -1642,13 +1708,13 @@
             if (isAdmin) {
                 document.getElementById('admin-toggle').classList.remove('hidden');
                 document.getElementById('admin-id').textContent = userId;
-                document.getElementById('my-tg-id').textContent = userId;
-                document.getElementById('admin-ids').value = ADMIN_IDS.join(', ');
-                document.getElementById('contact-username').value = CONTACT_USERNAME;
                 
                 // Загружаем промокоды
-                const promoText = Object.entries(PROMO_CODES).map(([k,v]) => `${k}:${v}`).join('\n');
-                document.getElementById('promo-codes').value = promoText;
+                const promoCodesEl = document.getElementById('promo-codes');
+                if (promoCodesEl) {
+                    const promoText = Object.entries(PROMO_CODES).map(([k,v]) => `${k}:${v}`).join('\n');
+                    promoCodesEl.value = promoText;
+                }
             }
             
             renderCategories();
@@ -1712,18 +1778,6 @@
                 showToast('⚠️ Настройте контакт в админ панели');
             }
             
-            haptic('success');
-        }
-
-        function saveContactUsername() {
-            const username = document.getElementById('contact-username').value.trim().replace('@', '');
-            CONTACT_USERNAME = username;
-            localStorage.setItem('contactUsername', username);
-            
-            // Обновляем ссылку с новыми настройками
-            generateExportJSON();
-            
-            showToast('✅ Контакт сохранён! Скопируйте новую ссылку в разделе "Импорт"');
             haptic('success');
         }
 
@@ -1804,61 +1858,10 @@
             
             if (tab === 'list') updateAdminProductsList();
             if (tab === 'import') generateExportJSON();
+            if (tab === 'add') {
+                // Сбрасываем форму при переключении
+            }
             haptic('light');
-        }
-
-        function addProduct() {
-            const name = document.getElementById('p-name').value.trim();
-            const image = document.getElementById('p-image').value.trim();
-            const imagesRaw = document.getElementById('p-images').value.trim();
-            const price = parseInt(document.getElementById('p-price').value) || 0;
-            const discount = parseInt(document.getElementById('p-discount').value) || 0;
-            const category = document.getElementById('p-category').value;
-            const badge = document.getElementById('p-badge').value;
-            const description = document.getElementById('p-desc').value.trim();
-            const rating = parseFloat(document.getElementById('p-rating').value) || 4.5;
-            const sold = parseInt(document.getElementById('p-sold').value) || 0;
-
-            if (!name || !price) {
-                showToast('❌ Заполните название и цену!');
-                haptic('error');
-                return;
-            }
-
-            // Собираем все изображения
-            let images = [image || `https://via.placeholder.com/400x300?text=${encodeURIComponent(name)}`];
-            if (imagesRaw) {
-                const additional = imagesRaw.split(',').map(u => u.trim()).filter(u => u);
-                images = images.concat(additional);
-            }
-
-            const newProduct = {
-                id: Date.now(),
-                name,
-                image: images[0],
-                images,
-                price,
-                discount,
-                category,
-                badge,
-                description: description || 'Отличный товар по выгодной цене!',
-                rating,
-                sold
-            };
-
-            PRODUCTS_DATA.push(newProduct);
-            saveProducts();
-            renderProducts();
-            
-            // Очищаем форму
-            document.getElementById('p-name').value = '';
-            document.getElementById('p-image').value = '';
-            document.getElementById('p-images').value = '';
-            document.getElementById('p-price').value = '';
-            document.getElementById('p-desc').value = '';
-            
-            showToast('✅ Товар добавлен!');
-            haptic('success');
         }
 
         function deleteProduct(id) {
@@ -2110,22 +2113,6 @@
             generateExportJSON();
         }
 
-        function saveAdminIds() {
-            const input = document.getElementById('admin-ids').value;
-            const ids = input.split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
-            
-            if (ids.length === 0) {
-                showToast('❌ Укажите хотя бы один ID!');
-                haptic('error');
-                return;
-            }
-            
-            ADMIN_IDS = ids;
-            localStorage.setItem('adminIds', JSON.stringify(ADMIN_IDS));
-            showToast('✅ ID админов сохранены!');
-            haptic('success');
-        }
-
         function savePromoCodes() {
             const text = document.getElementById('promo-codes').value.trim();
             const codes = {};
@@ -2141,6 +2128,219 @@
             localStorage.setItem('promoCodes', JSON.stringify(PROMO_CODES));
             showToast('✅ Промокоды сохранены!');
             haptic('success');
+        }
+
+        // ==================== ЗАГРУЗКА ФОТО ====================
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Проверка размера (2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                showToast('❌ Файл слишком большой (макс 2MB)');
+                haptic('error');
+                return;
+            }
+
+            // Проверка типа
+            if (!file.type.startsWith('image/')) {
+                showToast('❌ Выберите изображение');
+                haptic('error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Сжимаем изображение
+                compressImage(e.target.result, 800, 0.8, (compressedBase64) => {
+                    uploadedPhotoBase64 = compressedBase64;
+                    
+                    const preview = document.getElementById('photo-preview');
+                    preview.innerHTML = `<img src="${compressedBase64}" alt="Превью">`;
+                    preview.classList.add('has-photo');
+                    
+                    // Добавляем кнопки
+                    const uploadDiv = document.getElementById('photo-upload');
+                    let actions = uploadDiv.querySelector('.photo-actions');
+                    if (!actions) {
+                        actions = document.createElement('div');
+                        actions.className = 'photo-actions';
+                        actions.innerHTML = `
+                            <button class="photo-change" onclick="document.getElementById('product-photo').click()">📷 Изменить</button>
+                            <button class="photo-remove" onclick="removePhoto()">🗑 Удалить</button>
+                        `;
+                        uploadDiv.appendChild(actions);
+                    }
+                    
+                    showToast('✅ Фото загружено');
+                    haptic('success');
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function compressImage(base64, maxWidth, quality, callback) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                
+                // Масштабируем если больше maxWidth
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                // Конвертируем в JPEG для лучшего сжатия
+                const compressed = canvas.toDataURL('image/jpeg', quality);
+                callback(compressed);
+            };
+            img.src = base64;
+        }
+
+        function removePhoto() {
+            uploadedPhotoBase64 = null;
+            
+            const preview = document.getElementById('photo-preview');
+            preview.innerHTML = `
+                <div class="photo-placeholder">
+                    <span style="font-size:48px;">📷</span>
+                    <p>Нажмите чтобы загрузить фото</p>
+                    <p style="font-size:11px;opacity:0.7;">JPG, PNG до 2MB</p>
+                </div>
+            `;
+            preview.classList.remove('has-photo');
+            
+            const actions = document.querySelector('.photo-actions');
+            if (actions) actions.remove();
+            
+            document.getElementById('product-photo').value = '';
+            showToast('🗑 Фото удалено');
+            haptic('light');
+        }
+
+        function generateProductCode() {
+            const name = document.getElementById('new-name').value.trim();
+            const desc = document.getElementById('new-desc').value.trim();
+            const price = parseInt(document.getElementById('new-price').value);
+            const category = document.getElementById('new-category').value;
+            
+            // Дефолтные значения
+            const discount = 10;
+            const rating = 4.8;
+            const sold = 100;
+            const badge = '';
+
+            // Валидация
+            if (!name) {
+                showToast('❌ Введите название товара');
+                haptic('error');
+                return;
+            }
+            if (!desc) {
+                showToast('❌ Введите описание товара');
+                haptic('error');
+                return;
+            }
+            if (!price || price <= 0) {
+                showToast('❌ Введите цену товара');
+                haptic('error');
+                return;
+            }
+            if (!uploadedPhotoBase64) {
+                showToast('❌ Загрузите фото товара');
+                haptic('error');
+                return;
+            }
+
+            // Генерируем ID
+            const newId = Date.now();
+
+            // Создаём объект товара
+            generatedProduct = {
+                id: newId,
+                name: name,
+                image: uploadedPhotoBase64,
+                images: [uploadedPhotoBase64],
+                price: price,
+                discount: discount,
+                category: category,
+                badge: badge,
+                description: desc,
+                rating: rating,
+                sold: sold
+            };
+
+            // Генерируем код
+            const code = JSON.stringify(generatedProduct, null, 2);
+            
+            document.getElementById('generated-code').value = code;
+            document.getElementById('generated-code-section').style.display = 'block';
+            
+            showToast('✅ Код сгенерирован!');
+            haptic('success');
+            
+            // Скроллим к коду
+            document.getElementById('generated-code-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyGeneratedCode() {
+            const code = document.getElementById('generated-code').value;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('📋 Код скопирован!');
+                haptic('success');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.getElementById('generated-code');
+                textarea.select();
+                document.execCommand('copy');
+                showToast('📋 Код скопирован!');
+                haptic('success');
+            });
+        }
+
+        function addProductDirectly() {
+            if (!generatedProduct) {
+                showToast('❌ Сначала сгенерируйте код');
+                haptic('error');
+                return;
+            }
+
+            // Добавляем в массив
+            PRODUCTS_DATA.push(generatedProduct);
+            saveProducts();
+            
+            // Очищаем форму
+            clearAddForm();
+            
+            // Обновляем каталог
+            renderProducts();
+            updateAdminProductsList();
+            
+            showToast('✅ Товар добавлен в магазин!');
+            haptic('success');
+            createConfetti();
+        }
+
+        function clearAddForm() {
+            document.getElementById('new-name').value = '';
+            document.getElementById('new-desc').value = '';
+            document.getElementById('new-price').value = '';
+            document.getElementById('new-category').value = 'electronics';
+            document.getElementById('generated-code-section').style.display = 'none';
+            document.getElementById('generated-code').value = '';
+            
+            removePhoto();
+            
+            generatedProduct = null;
         }
 
         // ==================== ТАЙМЕР АКЦИИ ====================
@@ -2764,6 +2964,3 @@
     </script>
 </body>
 </html>
-</body>
-</html>
-
