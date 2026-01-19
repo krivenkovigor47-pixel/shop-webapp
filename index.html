@@ -48,30 +48,55 @@
             background: var(--accent);
             padding: 20px;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
             position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255,255,255,0.1) 50%,
+                transparent 70%
+            );
+            animation: headerShine 4s ease-in-out infinite;
+        }
+
+        @keyframes headerShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         .header h1 { 
             font-size: 24px; 
             margin-bottom: 4px;
-            animation: fadeInDown 0.5s ease;
+            animation: fadeInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            position: relative;
         }
 
         .header p { 
             font-size: 13px; 
             opacity: 0.9;
-            animation: fadeInDown 0.5s ease 0.1s both;
+            animation: fadeInDown 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.1s both;
+            position: relative;
         }
 
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-20px) scale(0.9);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -163,19 +188,45 @@
             font-size: 12px;
             white-space: nowrap;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cat-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cat-btn:active::before {
+            width: 200px;
+            height: 200px;
         }
 
         .cat-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
         .cat-btn.active {
             background: var(--accent);
             color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-            transform: scale(1.05);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.5);
+            transform: scale(1.08);
+            animation: categoryPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes categoryPulse {
+            0%, 100% { box-shadow: 0 4px 16px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 4px 24px rgba(102, 126, 234, 0.7); }
         }
 
         /* ========== ПОИСК ========== */
@@ -219,29 +270,51 @@
             padding: 12px;
             cursor: pointer;
             position: relative;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            animation: fadeInUp 0.4s ease backwards;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: productAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
+            overflow: hidden;
         }
 
-        @keyframes fadeInUp {
+        .product::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.1),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+
+        .product:hover::before {
+            left: 100%;
+        }
+
+        @keyframes productAppear {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(40px) scale(0.9) rotateX(10deg);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1) rotateX(0);
             }
         }
 
         .product:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2);
         }
 
         .product:active { 
-            transform: scale(0.98); 
+            transform: scale(0.96); 
+            transition: transform 0.1s;
         }
 
         .product-badges {
@@ -257,63 +330,152 @@
         .product-badge {
             background: var(--red);
             color: #fff;
-            padding: 4px 8px;
+            padding: 4px 10px;
             border-radius: 8px;
             font-size: 10px;
             font-weight: bold;
-            box-shadow: 0 2px 6px rgba(255, 107, 107, 0.4);
-            animation: pulse-badge 2s infinite;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5);
+            animation: badgeFloat 3s ease-in-out infinite, badgeGlow 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes pulse-badge {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        .product-badge::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255,255,255,0.3) 50%,
+                transparent 60%
+            );
+            animation: badgeShine 2s ease-in-out infinite;
+        }
+
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        @keyframes badgeGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(255, 107, 107, 0.5); }
+            50% { box-shadow: 0 4px 20px rgba(255, 107, 107, 0.8); }
+        }
+
+        @keyframes badgeShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         .product-badge.hit {
             background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+            animation: badgeFloat 3s ease-in-out infinite, hitGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes hitGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5); }
+            50% { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.8); }
         }
 
         .product-badge.new {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+            animation: badgeFloat 3s ease-in-out infinite, newGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes newGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 4px 20px rgba(59, 130, 246, 0.8); }
         }
 
         .product-badge.low {
             background: linear-gradient(135deg, #ef4444, #dc2626);
-            animation: pulse-badge 1s infinite;
+            animation: badgeShake 0.5s ease-in-out infinite, lowGlow 1s ease-in-out infinite;
+        }
+
+        @keyframes badgeShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px) rotate(-1deg); }
+            75% { transform: translateX(2px) rotate(1deg); }
+        }
+
+        @keyframes lowGlow {
+            0%, 100% { box-shadow: 0 4px 12px rgba(239, 68, 68, 0.6); }
+            50% { box-shadow: 0 4px 24px rgba(239, 68, 68, 1); }
         }
 
         .product-favorite {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border: none;
             border-radius: 50%;
             background: rgba(0,0,0,0.5);
             color: white;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+        }
+
+        .product-favorite::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--red-solid);
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .product-favorite:hover {
+            transform: scale(1.15);
+            background: rgba(0,0,0,0.7);
         }
 
         .product-favorite:active {
-            transform: scale(0.9);
+            transform: scale(0.85);
         }
 
         .product-favorite.active {
             background: var(--red-solid);
-            animation: heartBeat 0.5s ease;
+            animation: heartBeatPro 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 16px rgba(255, 107, 107, 0.5);
         }
 
-        @keyframes heartBeat {
+        .product-favorite.active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--red-solid);
+            animation: heartRipple 0.6s ease-out;
+        }
+
+        @keyframes heartBeatPro {
             0% { transform: scale(1); }
-            25% { transform: scale(1.3); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.2); }
+            15% { transform: scale(1.4) rotate(-10deg); }
+            30% { transform: scale(0.9) rotate(10deg); }
+            45% { transform: scale(1.25) rotate(-5deg); }
+            60% { transform: scale(0.95) rotate(5deg); }
+            75% { transform: scale(1.15); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes heartRipple {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
         }
 
         .product-img {
@@ -323,11 +485,51 @@
             border-radius: 12px;
             margin-bottom: 10px;
             background: var(--bg);
-            transition: transform 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            filter: brightness(1);
         }
 
         .product:hover .product-img {
-            transform: scale(1.02);
+            transform: scale(1.08) rotate(1deg);
+            filter: brightness(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Миниатюры в карточке товара */
+        .product-thumbs {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+
+        .product-thumb {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .product-thumb:hover {
+            opacity: 1;
+            border-color: var(--accent-solid);
+        }
+
+        .product-thumbs-more {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: var(--hint);
+            font-weight: 600;
         }
 
         .product-name {
@@ -362,6 +564,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: priceGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes priceGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
         }
 
         .product-info {
@@ -464,19 +672,54 @@
             align-items: center;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(34, 197, 94, 0.4);
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px rgba(34, 197, 94, 0.5);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 100;
-            animation: slideUp 0.5s ease;
+            animation: cartAppear 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow: hidden;
+            position: fixed;
+        }
+
+        .cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255,255,255,0.2),
+                transparent
+            );
+            animation: cartShine 3s ease-in-out infinite;
+        }
+
+        @keyframes cartShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        @keyframes cartAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .cart-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(34, 197, 94, 0.5);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(34, 197, 94, 0.6);
         }
 
         .cart-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
+            transition: transform 0.1s;
         }
 
         #cart-count {
@@ -501,34 +744,58 @@
             position: fixed;
             bottom: 80px;
             right: 12px;
-            width: 56px;
-            height: 56px;
+            width: 60px;
+            height: 60px;
             background: var(--accent);
             border: none;
             border-radius: 50%;
             color: white;
-            font-size: 24px;
+            font-size: 26px;
             cursor: pointer;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.5);
             z-index: 99;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            animation: askBtnFloat 3s ease-in-out infinite, askBtnGlow 2s ease-in-out infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4); }
-            50% { box-shadow: 0 4px 24px rgba(102, 126, 234, 0.6); }
+        @keyframes askBtnFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            75% { transform: translateY(-5px) rotate(-5deg); }
+        }
+
+        @keyframes askBtnGlow {
+            0%, 100% { box-shadow: 0 8px 32px rgba(102, 126, 234, 0.5); }
+            50% { box-shadow: 0 8px 48px rgba(102, 126, 234, 0.8); }
+        }
+
+        .ask-btn::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: askBtnRipple 2s ease-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes askBtnRipple {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.8); opacity: 0; }
         }
 
         .ask-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.15) rotate(10deg);
+            animation: none;
         }
 
         .ask-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.9);
+            transition: transform 0.1s;
         }
 
         .ask-btn.with-cart {
@@ -565,12 +832,23 @@
             left: 0;
             right: 0;
             background: var(--bg);
-            border-radius: 24px 24px 0 0;
+            border-radius: 28px 28px 0 0;
             max-height: 90vh;
             overflow-y: auto;
             padding: 24px;
-            animation: slideUp 0.3s ease;
-            box-shadow: 0 -4px 24px rgba(0,0,0,0.4);
+            animation: modalSlideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.5);
+        }
+
+        @keyframes modalSlideUp {
+            from { 
+                transform: translateY(100%) scale(0.9); 
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0) scale(1); 
+                opacity: 1;
+            }
         }
 
         @keyframes slideUp {
@@ -640,6 +918,103 @@
             background: var(--accent-solid);
             width: 24px;
             border-radius: 4px;
+        }
+
+        /* Навигация галереи */
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .gallery-nav:hover {
+            background: rgba(0,0,0,0.7);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .gallery-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .gallery-nav.prev {
+            left: 8px;
+        }
+
+        .gallery-nav.next {
+            right: 8px;
+        }
+
+        .gallery-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .gallery-counter {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Превью в модалке */
+        .modal-thumbs {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .modal-thumbs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .modal-thumbs::-webkit-scrollbar-thumb {
+            background: var(--accent-solid);
+            border-radius: 2px;
+        }
+
+        .modal-thumb {
+            width: 56px;
+            height: 56px;
+            border-radius: 10px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            opacity: 0.6;
+        }
+
+        .modal-thumb:hover {
+            opacity: 0.9;
+        }
+
+        .modal-thumb.active {
+            border-color: var(--accent-solid);
+            opacity: 1;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
         }
 
         .modal-name {
@@ -1220,74 +1595,127 @@
         }
 
         /* ========== ЗАГРУЗКА ФОТО ========== */
-        .photo-upload {
+        /* Множественная загрузка фото */
+        .photos-upload {
             margin-bottom: 12px;
         }
 
-        .photo-preview {
-            width: 100%;
-            height: 200px;
-            border: 2px dashed rgba(255,255,255,0.2);
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 1;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
             overflow: hidden;
-            transition: all 0.3s ease;
             background: var(--bg);
+            border: 2px solid var(--green-solid);
+            animation: fadeInUp 0.3s ease;
         }
 
-        .photo-preview:hover {
-            border-color: var(--accent-solid);
-            background: rgba(102, 126, 234, 0.1);
-        }
-
-        .photo-preview.has-photo {
-            border-style: solid;
-            border-color: var(--green-solid);
-        }
-
-        .photo-preview img {
+        .photo-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .photo-placeholder {
-            text-align: center;
+        .photo-item-delete {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .photo-item-delete:hover {
+            transform: scale(1.1);
+            background: var(--red-solid);
+        }
+
+        .photo-item-main {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            background: var(--accent-solid);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .photo-item:first-child .photo-item-main {
+            display: block;
+        }
+
+        .photo-item .photo-item-main {
+            display: none;
+        }
+
+        .photo-item:first-child::after {
+            content: 'Главное';
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            background: var(--accent-solid);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .photo-add-btn {
+            width: 100%;
+            padding: 24px;
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--bg);
             color: var(--hint);
         }
 
-        .photo-placeholder p {
-            margin-top: 8px;
-            font-size: 13px;
-        }
-
-        .photo-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .photo-actions button {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .photo-change {
-            background: var(--bg2);
+        .photo-add-btn:hover {
+            border-color: var(--accent-solid);
+            background: rgba(102, 126, 234, 0.1);
             color: var(--text);
         }
 
-        .photo-remove {
-            background: rgba(255,107,107,0.2);
-            color: var(--red-solid);
+        .photo-add-btn.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .photo-add-btn p {
+            margin-top: 4px;
+            font-size: 12px;
+        }
+
+        .photos-counter {
+            text-align: center;
+            font-size: 12px;
+            color: var(--hint);
+            margin-top: 8px;
         }
 
         /* ========== ТАБЫ ========== */
@@ -1471,16 +1899,21 @@
             <!-- Добавить товар -->
             <div id="tab-add" class="admin-tab" style="display:block;">
                 <div class="admin-section">
-                    <h3>📸 Фото товара</h3>
-                    <div class="photo-upload" id="photo-upload">
-                        <input type="file" id="product-photo" accept="image/*" onchange="handlePhotoUpload(event)" style="display:none;">
-                        <div class="photo-preview" id="photo-preview" onclick="document.getElementById('product-photo').click()">
-                            <div class="photo-placeholder">
-                                <span style="font-size:48px;">📷</span>
-                                <p>Нажмите чтобы загрузить фото</p>
-                                <p style="font-size:11px;opacity:0.7;">JPG, PNG до 2MB</p>
-                            </div>
+                    <h3>📸 Фото товара (до 10 шт)</h3>
+                    <div class="photos-upload" id="photos-upload">
+                        <input type="file" id="product-photos" accept="image/*" multiple onchange="handleMultiplePhotos(event)" style="display:none;">
+                        
+                        <div class="photos-grid" id="photos-grid">
+                            <!-- Загруженные фото будут здесь -->
                         </div>
+                        
+                        <div class="photo-add-btn" id="photo-add-btn" onclick="document.getElementById('product-photos').click()">
+                            <span style="font-size:32px;">➕</span>
+                            <p>Добавить фото</p>
+                            <p style="font-size:10px;opacity:0.7;">JPG, PNG до 2MB каждое</p>
+                        </div>
+                        
+                        <p class="photos-counter" id="photos-counter">Загружено: 0 / 10</p>
                     </div>
                 </div>
 
@@ -1692,7 +2125,7 @@
         let currentGalleryIndex = 0;
         let searchTimeout = null;
         let currentProductId = null;
-        let uploadedPhotoBase64 = null;
+        let uploadedPhotos = []; // Массив до 10 фото
         let generatedProduct = null;
 
         // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -2130,53 +2563,57 @@
             haptic('success');
         }
 
-        // ==================== ЗАГРУЗКА ФОТО ====================
-        function handlePhotoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        // ==================== ЗАГРУЗКА НЕСКОЛЬКИХ ФОТО ====================
+        const MAX_PHOTOS = 10;
 
-            // Проверка размера (2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                showToast('❌ Файл слишком большой (макс 2MB)');
+        function handleMultiplePhotos(event) {
+            const files = Array.from(event.target.files);
+            if (!files.length) return;
+
+            // Проверяем лимит
+            const remaining = MAX_PHOTOS - uploadedPhotos.length;
+            if (remaining <= 0) {
+                showToast('❌ Максимум 10 фото');
                 haptic('error');
                 return;
             }
 
-            // Проверка типа
-            if (!file.type.startsWith('image/')) {
-                showToast('❌ Выберите изображение');
-                haptic('error');
-                return;
-            }
+            const filesToProcess = files.slice(0, remaining);
+            let processed = 0;
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                // Сжимаем изображение
-                compressImage(e.target.result, 800, 0.8, (compressedBase64) => {
-                    uploadedPhotoBase64 = compressedBase64;
-                    
-                    const preview = document.getElementById('photo-preview');
-                    preview.innerHTML = `<img src="${compressedBase64}" alt="Превью">`;
-                    preview.classList.add('has-photo');
-                    
-                    // Добавляем кнопки
-                    const uploadDiv = document.getElementById('photo-upload');
-                    let actions = uploadDiv.querySelector('.photo-actions');
-                    if (!actions) {
-                        actions = document.createElement('div');
-                        actions.className = 'photo-actions';
-                        actions.innerHTML = `
-                            <button class="photo-change" onclick="document.getElementById('product-photo').click()">📷 Изменить</button>
-                            <button class="photo-remove" onclick="removePhoto()">🗑 Удалить</button>
-                        `;
-                        uploadDiv.appendChild(actions);
-                    }
-                    
-                    showToast('✅ Фото загружено');
-                    haptic('success');
-                });
-            };
-            reader.readAsDataURL(file);
+            filesToProcess.forEach(file => {
+                // Проверка размера (2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    showToast('❌ Файл слишком большой (макс 2MB)');
+                    haptic('error');
+                    return;
+                }
+
+                // Проверка типа
+                if (!file.type.startsWith('image/')) {
+                    showToast('❌ Выберите изображение');
+                    haptic('error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    compressImage(e.target.result, 800, 0.8, (compressedBase64) => {
+                        uploadedPhotos.push(compressedBase64);
+                        processed++;
+                        
+                        if (processed === filesToProcess.length) {
+                            updatePhotosGrid();
+                            showToast(`✅ Загружено фото: ${uploadedPhotos.length}`);
+                            haptic('success');
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Сбрасываем input для повторной загрузки того же файла
+            event.target.value = '';
         }
 
         function compressImage(base64, maxWidth, quality, callback) {
@@ -2205,25 +2642,41 @@
             img.src = base64;
         }
 
-        function removePhoto() {
-            uploadedPhotoBase64 = null;
-            
-            const preview = document.getElementById('photo-preview');
-            preview.innerHTML = `
-                <div class="photo-placeholder">
-                    <span style="font-size:48px;">📷</span>
-                    <p>Нажмите чтобы загрузить фото</p>
-                    <p style="font-size:11px;opacity:0.7;">JPG, PNG до 2MB</p>
+        function updatePhotosGrid() {
+            const grid = document.getElementById('photos-grid');
+            const counter = document.getElementById('photos-counter');
+            const addBtn = document.getElementById('photo-add-btn');
+
+            // Обновляем счётчик
+            counter.textContent = `Загружено: ${uploadedPhotos.length} / ${MAX_PHOTOS}`;
+
+            // Скрываем кнопку если достигли лимита
+            if (uploadedPhotos.length >= MAX_PHOTOS) {
+                addBtn.classList.add('disabled');
+            } else {
+                addBtn.classList.remove('disabled');
+            }
+
+            // Отрисовываем фото
+            grid.innerHTML = uploadedPhotos.map((photo, index) => `
+                <div class="photo-item">
+                    <img src="${photo}" alt="Фото ${index + 1}">
+                    <button class="photo-item-delete" onclick="removePhotoByIndex(${index})">×</button>
                 </div>
-            `;
-            preview.classList.remove('has-photo');
-            
-            const actions = document.querySelector('.photo-actions');
-            if (actions) actions.remove();
-            
-            document.getElementById('product-photo').value = '';
+            `).join('');
+        }
+
+        function removePhotoByIndex(index) {
+            uploadedPhotos.splice(index, 1);
+            updatePhotosGrid();
             showToast('🗑 Фото удалено');
             haptic('light');
+        }
+
+        function clearAllPhotos() {
+            uploadedPhotos = [];
+            updatePhotosGrid();
+            document.getElementById('product-photos').value = '';
         }
 
         function generateProductCode() {
@@ -2254,8 +2707,8 @@
                 haptic('error');
                 return;
             }
-            if (!uploadedPhotoBase64) {
-                showToast('❌ Загрузите фото товара');
+            if (uploadedPhotos.length === 0) {
+                showToast('❌ Загрузите хотя бы 1 фото');
                 haptic('error');
                 return;
             }
@@ -2263,12 +2716,12 @@
             // Генерируем ID
             const newId = Date.now();
 
-            // Создаём объект товара
+            // Создаём объект товара (первое фото — главное)
             generatedProduct = {
                 id: newId,
                 name: name,
-                image: uploadedPhotoBase64,
-                images: [uploadedPhotoBase64],
+                image: uploadedPhotos[0],
+                images: uploadedPhotos,
                 price: price,
                 discount: discount,
                 category: category,
@@ -2284,7 +2737,7 @@
             document.getElementById('generated-code').value = code;
             document.getElementById('generated-code-section').style.display = 'block';
             
-            showToast('✅ Код сгенерирован!');
+            showToast(`✅ Код сгенерирован! (${uploadedPhotos.length} фото)`);
             haptic('success');
             
             // Скроллим к коду
@@ -2338,7 +2791,7 @@
             document.getElementById('generated-code-section').style.display = 'none';
             document.getElementById('generated-code').value = '';
             
-            removePhoto();
+            clearAllPhotos();
             
             generatedProduct = null;
         }
@@ -2455,6 +2908,26 @@
                 const isFav = favorites.includes(p.id);
                 const badgeClass = p.badge ? `product-badge ${p.badge}` : 'product-badge';
                 const badgeText = p.badge === 'hit' ? '🔥 Хит' : p.badge === 'new' ? '🆕 Новинка' : p.badge === 'low' ? '⚡ Мало' : `-${p.discount}%`;
+                const images = p.images || [p.image];
+                const hasMultipleImages = images.length > 1;
+                
+                // Формируем миниатюры (максимум 2 + счётчик если больше)
+                let thumbsHTML = '';
+                if (hasMultipleImages) {
+                    const showThumbs = images.slice(1, 3); // Берём 2-ю и 3-ю фотку
+                    const remaining = images.length - 3;
+                    
+                    thumbsHTML = `
+                        <div class="product-thumbs" onclick="event.stopPropagation(); openProduct(${p.id})">
+                            ${showThumbs.map(img => `
+                                <img class="product-thumb" src="${img}" 
+                                     onerror="this.style.display='none'"
+                                     loading="lazy">
+                            `).join('')}
+                            ${remaining > 0 ? `<div class="product-thumbs-more">+${remaining}</div>` : ''}
+                        </div>
+                    `;
+                }
                 
                 return `
                     <div class="product" style="animation-delay: ${index * 0.05}s">
@@ -2467,6 +2940,7 @@
                         <img class="product-img" src="${p.image}" alt="${p.name}" loading="lazy"
                              onerror="this.src='https://via.placeholder.com/200x150?text=Фото'"
                              onclick="openProduct(${p.id})">
+                        ${thumbsHTML}
                         <div onclick="openProduct(${p.id})">
                             <div class="product-name">${p.name}</div>
                             <div class="product-prices">
@@ -2496,6 +2970,7 @@
             const images = p.images || [p.image];
             const isFav = favorites.includes(p.id);
             const viewingCount = Math.floor(Math.random() * 15) + 5;
+            const hasMultipleImages = images.length > 1;
             
             currentGalleryIndex = 0;
             
@@ -2503,16 +2978,29 @@
                 <button class="modal-close" onclick="closeModal()">×</button>
                 
                 <div class="modal-gallery">
+                    ${hasMultipleImages ? `
+                        <button class="gallery-nav prev" onclick="navigateGallery(${id}, -1)" id="gallery-prev">‹</button>
+                        <button class="gallery-nav next" onclick="navigateGallery(${id}, 1)" id="gallery-next">›</button>
+                    ` : ''}
+                    
                     <img class="modal-img" id="gallery-img" src="${images[0]}" 
                          onerror="this.src='https://via.placeholder.com/400x300?text=Фото'">
-                    ${images.length > 1 ? `
-                        <div class="gallery-dots">
-                            ${images.map((_, i) => `
-                                <div class="gallery-dot ${i === 0 ? 'active' : ''}" onclick="changeGalleryImage(${id}, ${i})"></div>
-                            `).join('')}
-                        </div>
+                    
+                    ${hasMultipleImages ? `
+                        <div class="gallery-counter" id="gallery-counter">1 / ${images.length}</div>
                     ` : ''}
                 </div>
+                
+                ${hasMultipleImages ? `
+                    <div class="modal-thumbs" id="modal-thumbs">
+                        ${images.map((img, i) => `
+                            <img class="modal-thumb ${i === 0 ? 'active' : ''}" 
+                                 src="${img}" 
+                                 onclick="changeGalleryImage(${id}, ${i})"
+                                 onerror="this.style.display='none'">
+                        `).join('')}
+                    </div>
+                ` : ''}
                 
                 <div class="viewing-now">
                     <div class="viewing-dot"></div>
@@ -2549,7 +3037,47 @@
             `;
             
             modal.classList.add('active');
+            updateGalleryNavigation(images.length);
+            
+            // Добавляем свайп для галереи
+            if (hasMultipleImages) {
+                setupGallerySwipe(id, images.length);
+            }
+            
             haptic('light');
+        }
+
+        // Свайп для мобильных устройств
+        function setupGallerySwipe(productId, totalImages) {
+            const gallery = document.querySelector('.modal-gallery');
+            if (!gallery) return;
+            
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            gallery.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+            
+            gallery.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe(productId);
+            }, { passive: true });
+            
+            function handleSwipe(productId) {
+                const swipeThreshold = 50;
+                const diff = touchStartX - touchEndX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        // Свайп влево → следующее фото
+                        navigateGallery(productId, 1);
+                    } else {
+                        // Свайп вправо → предыдущее фото
+                        navigateGallery(productId, -1);
+                    }
+                }
+            }
         }
 
         function updateFavBtn(btn, id) {
@@ -2559,22 +3087,60 @@
 
         function changeGalleryImage(productId, index) {
             const p = PRODUCTS_DATA.find(x => x.id === productId);
-            if (!p || !p.images) return;
+            if (!p) return;
+            
+            const images = p.images || [p.image];
+            if (index < 0 || index >= images.length) return;
             
             currentGalleryIndex = index;
             const img = document.getElementById('gallery-img');
             img.style.opacity = '0';
             
             setTimeout(() => {
-                img.src = p.images[index];
+                img.src = images[index];
                 img.style.opacity = '1';
             }, 150);
             
-            document.querySelectorAll('.gallery-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
+            // Обновляем миниатюры
+            document.querySelectorAll('.modal-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
             });
             
+            // Обновляем счётчик
+            const counter = document.getElementById('gallery-counter');
+            if (counter) {
+                counter.textContent = `${index + 1} / ${images.length}`;
+            }
+            
+            // Обновляем состояние кнопок навигации
+            updateGalleryNavigation(images.length);
+            
             haptic('light');
+        }
+
+        function navigateGallery(productId, direction) {
+            const p = PRODUCTS_DATA.find(x => x.id === productId);
+            if (!p) return;
+            
+            const images = p.images || [p.image];
+            let newIndex = currentGalleryIndex + direction;
+            
+            // Зацикливание
+            if (newIndex < 0) newIndex = images.length - 1;
+            if (newIndex >= images.length) newIndex = 0;
+            
+            changeGalleryImage(productId, newIndex);
+        }
+
+        function updateGalleryNavigation(totalImages) {
+            const prevBtn = document.getElementById('gallery-prev');
+            const nextBtn = document.getElementById('gallery-next');
+            
+            if (prevBtn && nextBtn) {
+                // Можно отключить кнопки на крайних позициях, но лучше зацикливать
+                prevBtn.style.opacity = totalImages > 1 ? '1' : '0.3';
+                nextBtn.style.opacity = totalImages > 1 ? '1' : '0.3';
+            }
         }
 
         function closeModal() {
@@ -2964,3 +3530,8 @@
     </script>
 </body>
 </html>
+
+    </script>
+</body>
+</html>
+
