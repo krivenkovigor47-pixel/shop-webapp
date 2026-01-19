@@ -1680,6 +1680,58 @@
             font-weight: 600;
         }
 
+        /* Drag & Drop для фото */
+        .photo-item.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+            border-color: var(--accent-solid);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
+        }
+
+        .photo-item.drag-over {
+            border-color: var(--accent-solid);
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+        }
+
+        .photo-item-drag {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 24px;
+            height: 24px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            font-size: 12px;
+            color: white;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .photo-item-drag:hover {
+            background: rgba(0,0,0,0.8);
+            transform: scale(1.1);
+        }
+
+        .photo-item-drag:active {
+            cursor: grabbing;
+        }
+
+        .photos-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--hint);
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+        }
+
         .photo-add-btn {
             width: 100%;
             padding: 24px;
@@ -1914,6 +1966,7 @@
                         </div>
                         
                         <p class="photos-counter" id="photos-counter">Загружено: 0 / 10</p>
+                        <p class="photos-hint">💡 Перетаскивайте фото для изменения порядка. Первое фото — главное.</p>
                     </div>
                 </div>
 
@@ -1937,14 +1990,22 @@
 
                 <div class="admin-section" id="generated-code-section" style="display:none;">
                     <h3>📦 Код товара (скопируйте)</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
-                        Скопируйте этот код и добавьте в массив PRODUCTS_DATA в index.html
-                    </p>
+                    
+                    <div style="background: rgba(34, 197, 94, 0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; border-left: 4px solid var(--green-solid);">
+                        <p style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">📍 Куда вставить код:</p>
+                        <ol style="font-size: 12px; color: var(--hint); margin-left: 16px; line-height: 1.8;">
+                            <li>Откройте файл <code style="background: var(--bg); padding: 2px 6px; border-radius: 4px;">index.html</code></li>
+                            <li>Найдите строку: <code style="background: var(--bg); padding: 2px 6px; border-radius: 4px;">let PRODUCTS_DATA = [</code></li>
+                            <li>Вставьте код <b>внутрь квадратных скобок</b> через запятую</li>
+                            <li>Сохраните файл и загрузите на GitHub</li>
+                        </ol>
+                    </div>
+                    
                     <textarea class="admin-textarea" id="generated-code" readonly style="min-height:200px;font-size:11px;"></textarea>
                     <button class="admin-btn admin-btn-primary" onclick="copyGeneratedCode()">📋 Скопировать код</button>
                     <button class="admin-btn admin-btn-success" onclick="addProductDirectly()" style="margin-top:8px;">➕ Добавить сразу в магазин</button>
                     <p style="font-size:11px; color:var(--hint); margin-top:8px;">
-                        ⚠️ "Добавить сразу" — товар появится, но пропадёт после обновления страницы. Чтобы сохранить навсегда — вставьте код в файл.
+                        ⚠️ "Добавить сразу" — товар появится, но пропадёт после обновления. Для постоянного сохранения — вставьте код в файл или используйте "📥 Импорт" → "🔗 Ссылка на магазин".
                     </p>
                 </div>
             </div>
@@ -1961,16 +2022,6 @@
 
             <!-- Импорт/Экспорт -->
             <div id="tab-import" class="admin-tab" style="display:none;">
-                <div class="admin-section">
-                    <h3>🔗 Ссылка на магазин</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">
-                        Ссылка с вашими настройками — отправьте её покупателям!<br>
-                        Все товары и настройки будут загружены автоматически.
-                    </p>
-                    <input type="text" class="admin-input" id="shop-link" readonly style="font-size:11px;">
-                    <button class="admin-btn admin-btn-success" onclick="copyShopLink()">📋 Скопировать ссылку</button>
-                </div>
-
                 <div class="admin-section">
                     <h3>📤 Экспорт JSON</h3>
                     <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Или скопируйте JSON для бота</p>
@@ -2351,7 +2402,6 @@
 
         function generateExportJSON() {
             const textarea = document.getElementById('export-json');
-            const linkInput = document.getElementById('shop-link');
             
             const exportData = {
                 products: PRODUCTS_DATA,
@@ -2363,33 +2413,9 @@
             if (textarea) {
                 textarea.value = JSON.stringify(exportData, null, 2);
             }
-            
-            // Генерируем ссылку с настройками
-            if (linkInput) {
-                const baseUrl = window.location.origin + window.location.pathname;
-                const configBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(exportData))));
-                linkInput.value = `${baseUrl}?config=${configBase64}`;
-            }
         }
         
-        function copyShopLink() {
-            const linkInput = document.getElementById('shop-link');
-            if (!linkInput || !linkInput.value) {
-                showToast('❌ Сначала добавьте товары!');
-                haptic('error');
-                return;
-            }
-            
-            navigator.clipboard.writeText(linkInput.value).then(() => {
-                showToast('✅ Ссылка скопирована!');
-                haptic('success');
-            }).catch(() => {
-                linkInput.select();
-                document.execCommand('copy');
-                showToast('✅ Ссылка скопирована!');
-                haptic('success');
-            });
-        }
+
 
         function exportJSON() {
             const json = document.getElementById('export-json').value;
@@ -2657,13 +2683,136 @@
                 addBtn.classList.remove('disabled');
             }
 
-            // Отрисовываем фото
+            // Отрисовываем фото с drag & drop
             grid.innerHTML = uploadedPhotos.map((photo, index) => `
-                <div class="photo-item">
+                <div class="photo-item" 
+                     draggable="true" 
+                     data-index="${index}"
+                     ondragstart="handleDragStart(event, ${index})"
+                     ondragend="handleDragEnd(event)"
+                     ondragover="handleDragOver(event)"
+                     ondragleave="handleDragLeave(event)"
+                     ondrop="handleDrop(event, ${index})">
+                    <div class="photo-item-drag" title="Перетащите для изменения порядка">⋮⋮</div>
                     <img src="${photo}" alt="Фото ${index + 1}">
-                    <button class="photo-item-delete" onclick="removePhotoByIndex(${index})">×</button>
+                    <button class="photo-item-delete" onclick="event.stopPropagation(); removePhotoByIndex(${index})">×</button>
                 </div>
             `).join('');
+
+            // Добавляем touch события для мобильных
+            setupTouchDrag();
+        }
+
+        // ==================== DRAG & DROP ДЛЯ ФОТО ====================
+        let draggedPhotoIndex = null;
+
+        function handleDragStart(event, index) {
+            draggedPhotoIndex = index;
+            event.target.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            event.dataTransfer.setData('text/plain', index);
+            haptic('light');
+        }
+
+        function handleDragEnd(event) {
+            event.target.classList.remove('dragging');
+            document.querySelectorAll('.photo-item').forEach(item => {
+                item.classList.remove('drag-over');
+            });
+            draggedPhotoIndex = null;
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            const item = event.target.closest('.photo-item');
+            if (item && !item.classList.contains('dragging')) {
+                item.classList.add('drag-over');
+            }
+        }
+
+        function handleDragLeave(event) {
+            const item = event.target.closest('.photo-item');
+            if (item) {
+                item.classList.remove('drag-over');
+            }
+        }
+
+        function handleDrop(event, targetIndex) {
+            event.preventDefault();
+            const item = event.target.closest('.photo-item');
+            if (item) {
+                item.classList.remove('drag-over');
+            }
+
+            if (draggedPhotoIndex === null || draggedPhotoIndex === targetIndex) return;
+
+            // Меняем местами фото
+            const draggedPhoto = uploadedPhotos[draggedPhotoIndex];
+            uploadedPhotos.splice(draggedPhotoIndex, 1);
+            uploadedPhotos.splice(targetIndex, 0, draggedPhoto);
+
+            updatePhotosGrid();
+            showToast('📷 Порядок изменён');
+            haptic('success');
+        }
+
+        // Touch события для мобильных устройств
+        let touchDragIndex = null;
+        let touchClone = null;
+
+        function setupTouchDrag() {
+            const items = document.querySelectorAll('.photo-item');
+            
+            items.forEach((item, index) => {
+                const dragHandle = item.querySelector('.photo-item-drag');
+                if (!dragHandle) return;
+
+                dragHandle.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    touchDragIndex = index;
+                    item.classList.add('dragging');
+                    haptic('light');
+                }, { passive: false });
+
+                dragHandle.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const targetItem = elementBelow?.closest('.photo-item');
+                    
+                    // Убираем подсветку со всех
+                    items.forEach(i => i.classList.remove('drag-over'));
+                    
+                    // Подсвечиваем целевой
+                    if (targetItem && targetItem !== item) {
+                        targetItem.classList.add('drag-over');
+                    }
+                }, { passive: false });
+
+                dragHandle.addEventListener('touchend', (e) => {
+                    const touch = e.changedTouches[0];
+                    const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                    const targetItem = elementBelow?.closest('.photo-item');
+                    
+                    if (targetItem && targetItem !== item) {
+                        const targetIndex = parseInt(targetItem.dataset.index);
+                        if (!isNaN(targetIndex) && touchDragIndex !== targetIndex) {
+                            // Меняем местами
+                            const draggedPhoto = uploadedPhotos[touchDragIndex];
+                            uploadedPhotos.splice(touchDragIndex, 1);
+                            uploadedPhotos.splice(targetIndex, 0, draggedPhoto);
+                            updatePhotosGrid();
+                            showToast('📷 Порядок изменён');
+                            haptic('success');
+                        }
+                    }
+
+                    item.classList.remove('dragging');
+                    items.forEach(i => i.classList.remove('drag-over'));
+                    touchDragIndex = null;
+                });
+            });
         }
 
         function removePhotoByIndex(index) {
@@ -3530,8 +3679,3 @@
     </script>
 </body>
 </html>
-
-    </script>
-</body>
-</html>
-
