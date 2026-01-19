@@ -2361,20 +2361,12 @@
             }
             
             const encodedMessage = encodeURIComponent(message);
+            const telegramUrl = `https://t.me/SaturnKC?text=${encodedMessage}`;
             
-            if (CONTACT_USERNAME) {
-                // Открываем чат с продавцом
-                window.open(`https://t.me/${CONTACT_USERNAME}?text=${encodedMessage}`, '_blank');
-            } else if (tg) {
-                // Отправляем через бота
-                tg.sendData(JSON.stringify({ 
-                    action: 'question', 
-                    message: message,
-                    productId: currentProductId
-                }));
-                showToast('💬 Вопрос отправлен!');
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(telegramUrl);
             } else {
-                showToast('⚠️ Настройте контакт в админ панели');
+                window.location.href = telegramUrl;
             }
             
             haptic('success');
@@ -3797,9 +3789,13 @@
             
             createConfetti();
             
-            if (CONTACT_USERNAME) {
-                const encodedMessage = encodeURIComponent(message);
-                window.open(`https://t.me/${CONTACT_USERNAME}?text=${encodedMessage}`, '_blank');
+            const encodedMessage = encodeURIComponent(message);
+            const telegramUrl = `https://t.me/SaturnKC?text=${encodedMessage}`;
+            
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(telegramUrl);
+            } else {
+                window.location.href = telegramUrl;
             }
             
             cart = [];
@@ -3840,4 +3836,3 @@
     </script>
 </body>
 </html>
-
