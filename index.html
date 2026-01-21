@@ -490,50 +490,6 @@
             margin-top: 4px;
         }
 
-        /* ========== ТАЙМЕР АКЦИИ ========== */
-        .promo-timer {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
-            margin: 0 12px 12px;
-            padding: 12px 16px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
-            animation: slideInDown 0.5s ease;
-        }
-
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .promo-timer-text {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .promo-timer-countdown {
-            display: flex;
-            gap: 4px;
-        }
-
-        .promo-timer-block {
-            background: rgba(0,0,0,0.3);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 700;
-            min-width: 32px;
-            text-align: center;
-        }
-
         /* ========== ПУСТОЙ КАТАЛОГ ========== */
         .empty {
             grid-column: 1 / -1;
@@ -2097,8 +2053,6 @@
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('add')">➕ Добавить</button>
                 <button class="tab-btn" onclick="switchTab('list')">📋 Товары</button>
-                <button class="tab-btn" onclick="switchTab('import')">📥 Импорт</button>
-                <button class="tab-btn" onclick="switchTab('promo')">⏰ Акции</button>
             </div>
 
             <!-- Добавить товар -->
@@ -2168,61 +2122,10 @@
                 </div>
             </div>
 
-            <!-- Импорт/Экспорт -->
-            <div id="tab-import" class="admin-tab" style="display:none;">
-                <div class="admin-section">
-                    <h3>📤 Экспорт JSON</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Или скопируйте JSON для бота</p>
-                    <textarea class="admin-textarea" id="export-json" readonly></textarea>
-                    <button class="admin-btn admin-btn-primary" onclick="exportJSON()">📋 Скопировать JSON</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>📥 Импорт JSON</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Вставьте JSON от бота</p>
-                    <textarea class="admin-textarea" id="import-json" placeholder='[{"id":1,"name":"Товар","price":1000,...}]'></textarea>
-                    <button class="admin-btn admin-btn-success" onclick="importJSON()">✅ Импортировать</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>🔗 Демо товары</h3>
-                    <button class="admin-btn admin-btn-secondary" onclick="loadDemoProducts()">📦 Загрузить демо товары</button>
-                </div>
-            </div>
-
-            <!-- Акции и промокоды -->
-            <div id="tab-promo" class="admin-tab" style="display:none;">
-                <div class="admin-section">
-                    <h3>🏷 Промокоды</h3>
-                    <p style="font-size:12px; color:var(--hint); margin-bottom:10px;">Формат: КОД:СКИДКА% (каждый с новой строки)</p>
-                    <textarea class="admin-textarea" id="promo-codes" placeholder="SALE10:10&#10;VIP20:20&#10;MEGA30:30"></textarea>
-                    <button class="admin-btn admin-btn-primary" onclick="savePromoCodes()">💾 Сохранить промокоды</button>
-                </div>
-
-                <div class="admin-section">
-                    <h3>⏰ Таймер акции</h3>
-                    <input type="text" class="admin-input" id="promo-text" placeholder="Текст акции (🔥 Распродажа!)">
-                    <input type="number" class="admin-input" id="promo-hours" placeholder="Часов до конца" value="24">
-                    <button class="admin-btn admin-btn-success" onclick="startPromoTimer()">▶️ Запустить таймер</button>
-                    <button class="admin-btn admin-btn-secondary" onclick="stopPromoTimer()">⏹ Остановить</button>
-                </div>
-            </div>
         </div>
 
         <!-- КАТАЛОГ -->
         <div id="catalog">
-            <!-- Таймер акции -->
-            <div class="promo-timer" id="promo-timer" style="display:none;">
-                <div class="promo-timer-text" id="promo-timer-text">🔥 Распродажа!</div>
-                <div class="promo-timer-countdown">
-                    <div class="promo-timer-block" id="timer-hours">00</div>
-                    <div class="promo-timer-block">:</div>
-                    <div class="promo-timer-block" id="timer-minutes">00</div>
-                    <div class="promo-timer-block">:</div>
-                    <div class="promo-timer-block" id="timer-seconds">00</div>
-                </div>
-            </div>
-
             <div class="categories" id="categories"></div>
             
             <div class="search">
@@ -2276,7 +2179,6 @@
         
         let ADMIN_IDS = DEFAULT_ADMIN_IDS;
         let CONTACT_USERNAME = DEFAULT_CONTACT_USERNAME;
-        let PROMO_CODES = JSON.parse(localStorage.getItem('promoCodes') || '{}');
         
         const HARDCODED_PRODUCTS = [
             
@@ -2361,8 +2263,6 @@
             updateCartBtn();
             updateFavCount();
             updateAdminProductsList();
-            generateExportJSON();
-            loadPromoTimer();
             updateAskBtnPosition();
         });
 
@@ -2546,193 +2446,8 @@
             `).join('');
         }
 
-        function generateExportJSON() {
-            const textarea = document.getElementById('export-json');
-            
-            const exportData = {
-                products: PRODUCTS_DATA,
-                promoCodes: PROMO_CODES,
-                adminIds: ADMIN_IDS,
-                contactUsername: CONTACT_USERNAME
-            };
-            
-            if (textarea) {
-                textarea.value = JSON.stringify(exportData, null, 2);
-            }
-        }
-        
-
-
-        function exportJSON() {
-            const json = document.getElementById('export-json').value;
-            navigator.clipboard.writeText(json).then(() => {
-                showToast('📋 JSON скопирован!');
-                haptic('success');
-            }).catch(() => {
-                // Fallback для старых браузеров
-                const textarea = document.getElementById('export-json');
-                textarea.select();
-                document.execCommand('copy');
-                showToast('📋 JSON скопирован!');
-            });
-        }
-
-        function importJSON() {
-            const json = document.getElementById('import-json').value.trim();
-            if (!json) {
-                showToast('❌ Вставьте JSON!');
-                haptic('error');
-                return;
-            }
-            
-            try {
-                const data = JSON.parse(json);
-                
-                // Поддержка старого и нового формата
-                if (Array.isArray(data)) {
-                    PRODUCTS_DATA = data;
-                } else if (data.products) {
-                    PRODUCTS_DATA = data.products;
-                    if (data.promoCodes) {
-                        PROMO_CODES = data.promoCodes;
-                        localStorage.setItem('promoCodes', JSON.stringify(PROMO_CODES));
-                    }
-                    if (data.adminIds) {
-                        ADMIN_IDS = data.adminIds;
-                        localStorage.setItem('adminIds', JSON.stringify(ADMIN_IDS));
-                    }
-                    if (data.contactUsername) {
-                        CONTACT_USERNAME = data.contactUsername;
-                        localStorage.setItem('contactUsername', CONTACT_USERNAME);
-                    }
-                }
-                
-                saveProducts();
-                updateAdminProductsList();
-                renderProducts();
-                document.getElementById('import-json').value = '';
-                showToast('✅ Импортировано ' + PRODUCTS_DATA.length + ' товаров!');
-                haptic('success');
-                createConfetti();
-            } catch (e) {
-                showToast('❌ Неверный формат JSON!');
-                haptic('error');
-            }
-        }
-
-        function loadDemoProducts() {
-            const demo = [
-                {
-                    id: 1,
-                    name: "iPhone 15 Pro Max 256GB",
-                    image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch_GEO_US?wid=400",
-                    images: [
-                        "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch_GEO_US?wid=400"
-                    ],
-                    price: 159990,
-                    discount: 15,
-                    category: "electronics",
-                    badge: "hit",
-                    description: "Новейший iPhone с чипом A17 Pro. Титановый корпус, улучшенная камера 48 МП, Dynamic Island.",
-                    rating: 4.9,
-                    sold: 1250
-                },
-                {
-                    id: 2,
-                    name: "AirPods Pro 2 USB-C",
-                    image: "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=400",
-                    images: ["https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MQD83?wid=400"],
-                    price: 24990,
-                    discount: 20,
-                    category: "electronics",
-                    badge: "new",
-                    description: "Активное шумоподавление, адаптивный звук, до 30 часов работы с кейсом.",
-                    rating: 4.8,
-                    sold: 3420
-                },
-                {
-                    id: 3,
-                    name: "Nike Air Max 90",
-                    image: "https://static.nike.com/a/images/t_default/dzpraig56zmfpjpfvmzx/air-max-90-shoes-N7Tbw0.png",
-                    images: ["https://static.nike.com/a/images/t_default/dzpraig56zmfpjpfvmzx/air-max-90-shoes-N7Tbw0.png"],
-                    price: 12990,
-                    discount: 25,
-                    category: "clothes",
-                    badge: "",
-                    description: "Легендарные кроссовки с технологией Air Max для максимального комфорта.",
-                    rating: 4.7,
-                    sold: 890
-                },
-                {
-                    id: 4,
-                    name: "PlayStation 5 Slim",
-                    image: "https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$",
-                    images: ["https://gmedia.playstation.com/is/image/SIEPDC/ps5-product-thumbnail-01-en-14sep21?$facebook$"],
-                    price: 54990,
-                    discount: 10,
-                    category: "entertainment",
-                    badge: "hit",
-                    description: "Консоль нового поколения с SSD, 4K, 120fps и контроллером DualSense.",
-                    rating: 4.9,
-                    sold: 2100
-                },
-                {
-                    id: 5,
-                    name: "Яндекс Станция Макс",
-                    image: "https://avatars.mds.yandex.net/get-mpic/5220303/img_id2661688137195720650.jpeg/orig",
-                    images: ["https://avatars.mds.yandex.net/get-mpic/5220303/img_id2661688137195720650.jpeg/orig"],
-                    price: 16990,
-                    discount: 30,
-                    category: "home",
-                    badge: "",
-                    description: "Голосовой помощник Алиса, отличный звук, умный дом, LED-экран.",
-                    rating: 4.6,
-                    sold: 5600
-                },
-                {
-                    id: 6,
-                    name: "Худи Oversize Premium",
-                    image: "https://ir.ozone.ru/s3/multimedia-p/c1000/6544929913.jpg",
-                    images: ["https://ir.ozone.ru/s3/multimedia-p/c1000/6544929913.jpg"],
-                    price: 3990,
-                    discount: 40,
-                    category: "clothes",
-                    badge: "low",
-                    description: "Стильное худи оверсайз из плотного хлопка. Унисекс. Размеры S-XXL.",
-                    rating: 4.5,
-                    sold: 1890
-                }
-            ];
-            
-            PRODUCTS_DATA = demo;
-            saveProducts();
-            updateAdminProductsList();
-            renderProducts();
-            showToast('📦 Загружено ' + demo.length + ' демо товаров!');
-            haptic('success');
-            createConfetti();
-        }
-
         function saveProducts() {
             localStorage.setItem('products', JSON.stringify(PRODUCTS_DATA));
-            generateExportJSON();
-        }
-
-        function savePromoCodes() {
-            const text = document.getElementById('promo-codes').value.trim();
-            const codes = {};
-            
-            text.split('\n').forEach(line => {
-                const [code, discount] = line.split(':');
-                if (code && discount) {
-                    codes[code.trim().toUpperCase()] = parseInt(discount);
-                }
-            });
-            
-            PROMO_CODES = codes;
-            localStorage.setItem('promoCodes', JSON.stringify(PROMO_CODES));
-            showToast('✅ Промокоды сохранены!');
-            haptic('success');
         }
 
         // ==================== ЗАГРУЗКА НЕСКОЛЬКИХ ФОТО ====================
@@ -3347,68 +3062,6 @@
             clearAllPhotos();
             
             generatedProduct = null;
-        }
-
-        // ==================== ТАЙМЕР АКЦИИ ====================
-        let promoInterval = null;
-
-        function startPromoTimer() {
-            const text = document.getElementById('promo-text').value || '🔥 Распродажа!';
-            const hours = parseInt(document.getElementById('promo-hours').value) || 24;
-            
-            const endTime = Date.now() + hours * 60 * 60 * 1000;
-            localStorage.setItem('promoTimer', JSON.stringify({ text, endTime }));
-            
-            loadPromoTimer();
-            showToast('⏰ Таймер запущен!');
-            haptic('success');
-        }
-
-        function stopPromoTimer() {
-            localStorage.removeItem('promoTimer');
-            document.getElementById('promo-timer').style.display = 'none';
-            if (promoInterval) clearInterval(promoInterval);
-            showToast('⏹ Таймер остановлен');
-            haptic('light');
-        }
-
-        function loadPromoTimer() {
-            const data = JSON.parse(localStorage.getItem('promoTimer') || 'null');
-            if (!data) return;
-            
-            const { text, endTime } = data;
-            const timer = document.getElementById('promo-timer');
-            
-            if (Date.now() > endTime) {
-                localStorage.removeItem('promoTimer');
-                return;
-            }
-            
-            document.getElementById('promo-timer-text').textContent = text;
-            timer.style.display = 'flex';
-            
-            function updateTimer() {
-                const remaining = endTime - Date.now();
-                
-                if (remaining <= 0) {
-                    timer.style.display = 'none';
-                    localStorage.removeItem('promoTimer');
-                    clearInterval(promoInterval);
-                    return;
-                }
-                
-                const hours = Math.floor(remaining / (60 * 60 * 1000));
-                const minutes = Math.floor((remaining % (60 * 60 * 1000)) / (60 * 1000));
-                const seconds = Math.floor((remaining % (60 * 1000)) / 1000);
-                
-                document.getElementById('timer-hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('timer-minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('timer-seconds').textContent = String(seconds).padStart(2, '0');
-            }
-            
-            updateTimer();
-            if (promoInterval) clearInterval(promoInterval);
-            promoInterval = setInterval(updateTimer, 1000);
         }
 
         // ==================== КАТАЛОГ ====================
