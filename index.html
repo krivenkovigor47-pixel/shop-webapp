@@ -275,7 +275,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 </div>
 <script>
-const CONFIG={API:'http://79.141.215.184:8080',COLORS:{black:'#1a1a1a',white:'#f5f5f5',red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308',pink:'#ec4899',purple:'#8b5cf6',orange:'#f97316',gray:'#6b7280'}};
+const CONFIG={API:'http://79.141.215.184',COLORS:{black:'#1a1a1a',white:'#f5f5f5',red:'#ef4444',blue:'#3b82f6',green:'#22c55e',yellow:'#eab308',pink:'#ec4899',purple:'#8b5cf6',orange:'#f97316',gray:'#6b7280'}};
 const STATE={products:[],cart:JSON.parse(localStorage.getItem('cart')||'[]'),favs:JSON.parse(localStorage.getItem('favs')||'[]'),category:'all',user:null,discount:{total:0,referral:0,admin:0,promo:0,first_order:0,review:0,ref_level:'none',ref_count:0,promo_code:null,first_order_used:false},currentProduct:null,currentQty:1,currentColor:null,currentImg:0};
 const tg=window.Telegram?.WebApp;
 async function init(){if(tg){tg.expand();tg.enableClosingConfirmation();STATE.user=tg.initDataUnsafe?.user;if(tg.colorScheme==='light')document.body.classList.add('light')}if(localStorage.getItem('theme')==='light')document.body.classList.add('light');await Promise.all([loadProducts(),loadUserData()]);renderCategories();renderProducts();updateCartButton();updateFavButton();updateDiscountBadge();setTimeout(()=>{document.getElementById('loader').classList.add('hidden')},500);document.getElementById('searchInput').addEventListener('input',debounce(renderProducts,300))}
@@ -321,4 +321,5 @@ document.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
+
 
