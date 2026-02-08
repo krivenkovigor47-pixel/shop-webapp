@@ -4,395 +4,828 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>Saturn Shop</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#1a1a2e;--text:#eaeaea;--hint:#8b8b9e;--accent:#6c63ff;--accent2:#5a52d5;--card:#1e2746;--border:#2a3a5c;--ok:#4caf50;--no:#f44336;--gold:#ffd700;--r:16px;--rs:10px;--sh:0 4px 15px rgba(0,0,0,.3);--bg2:#16213e}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:80px}
-.hd{background:linear-gradient(135deg,var(--accent),#4a3fcf);padding:20px 16px 16px;position:sticky;top:0;z-index:100;box-shadow:var(--sh)}
-.ht{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.sn{font-size:22px;font-weight:800}
-.hi{display:flex;gap:12px}
-.hib{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:.2s;position:relative}
-.hib:active{transform:scale(.9)}
-.cb{position:absolute;top:-4px;right:-4px;background:var(--no);color:#fff;font-size:11px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px}
-.db{background:rgba(255,255,255,.12);border-radius:var(--rs);padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer}
-.db .e{font-size:20px}.db .t{flex:1}.db .p{font-size:20px;font-weight:800;color:var(--gold)}
-.sb{padding:12px 16px;position:sticky;top:0;z-index:99;background:var(--bg)}
-.si{width:100%;padding:12px 16px 12px 42px;border-radius:var(--r);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;outline:0;transition:.2s}
-.si:focus{border-color:var(--accent)}
-.sic{position:absolute;left:30px;top:50%;transform:translateY(-50%);font-size:16px;opacity:.5}
-.cats{padding:0 16px;overflow-x:auto;display:flex;gap:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:12px}
-.cats::-webkit-scrollbar{display:none}
-.ct{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;cursor:pointer;transition:.2s;white-space:nowrap}
-.ct.a{background:var(--accent);border-color:var(--accent);color:#fff}
-.pg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 16px}
-.pc{background:var(--card);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:.2s}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;scrollbar-width:none}
+*::-webkit-scrollbar{display:none}
+:root{
+--bg:#0a0a16;--bg2:#0f0f1e;--card:#14142a;--card2:#1a1a35;
+--border:rgba(255,255,255,.06);--border2:rgba(255,255,255,.1);
+--accent:#7c6aff;--accent2:#6355d8;--accent-g:rgba(124,106,255,.2);
+--text:#f0f0f5;--text2:#b8b8d0;--hint:#5a5a7e;
+--ok:#22c55e;--ok-bg:rgba(34,197,94,.08);
+--no:#ef4444;--no-bg:rgba(239,68,68,.08);
+--gold:#fbbf24;--gold-bg:rgba(251,191,36,.06);
+--r:16px;--r2:12px;
+--sh:0 8px 32px rgba(0,0,0,.5)
+}
+html,body{background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{border:none;background:none;color:inherit;cursor:pointer;font-family:inherit;-webkit-user-select:none;user-select:none}
+input{font-family:inherit}
+img{display:block}
+
+@keyframes fadeDown{0%{opacity:0;transform:translateY(-30px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
+@keyframes scaleIn{0%{opacity:0;transform:scale(.7)}100%{opacity:1;transform:scale(1)}}
+@keyframes slideUp{0%{transform:translateY(100%)}100%{transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes gradMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--accent-g)}50%{box-shadow:0 0 0 10px transparent}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bounceIn{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes heartPop{0%{transform:scale(1)}30%{transform:scale(1.4)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes countPop{0%{opacity:0;transform:scale(.5)}60%{transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+
+/* === HEADER === */
+.hdr{
+background:linear-gradient(135deg,#1a0a3e 0%,#0d1b3e 40%,#0a2540 70%,#162040 100%);
+background-size:250% 250%;animation:gradMove 10s ease infinite,fadeDown .5s ease both;
+padding:18px 16px 14px;position:sticky;top:0;z-index:100;
+border-bottom:1px solid rgba(124,106,255,.1);
+box-shadow:0 4px 30px rgba(0,0,0,.5)
+}
+.hdr-top{display:flex;justify-content:space-between;align-items:center}
+.hdr-top.hd{margin-bottom:12px}
+.hdr-logo{display:flex;align-items:center;gap:10px}
+.hdr-planet{font-size:26px;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(124,106,255,.35))}
+.hdr-name{font-size:22px;font-weight:900;letter-spacing:-.5px;background:linear-gradient(135deg,#fff 30%,#c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-sec{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:600;color:#6ee7b7;background:rgba(16,185,129,.08);padding:2px 7px;border-radius:12px;margin-left:8px;letter-spacing:.3px}
+.hdr-btns{display:flex;gap:10px}
+.hdr-b{
+width:42px;height:42px;border-radius:50%;
+background:rgba(255,255,255,.07);backdrop-filter:blur(12px);
+display:flex;align-items:center;justify-content:center;
+font-size:18px;transition:.2s;position:relative;border:1px solid rgba(255,255,255,.04)
+}
+.hdr-b:active{transform:scale(.85);background:rgba(255,255,255,.14)}
+.hdr-badge{
+position:absolute;top:-4px;right:-4px;
+background:linear-gradient(135deg,#ef4444,#dc2626);
+color:#fff;font-size:10px;font-weight:800;
+min-width:18px;height:18px;border-radius:9px;
+display:flex;align-items:center;justify-content:center;
+padding:0 5px;animation:bounceIn .4s ease;
+box-shadow:0 2px 8px rgba(239,68,68,.4)
+}
+.hdr-disc{
+display:flex;align-items:center;gap:10px;
+background:linear-gradient(135deg,rgba(251,191,36,.07),rgba(245,158,11,.03));
+backdrop-filter:blur(10px);border-radius:14px;padding:11px 14px;
+cursor:pointer;border:1px solid rgba(251,191,36,.1);transition:.25s;
+animation:fadeUp .5s .3s both
+}
+.hdr-disc:active{transform:scale(.98);background:rgba(251,191,36,.12)}
+.hdr-disc .i{font-size:18px;flex-shrink:0}
+.hdr-disc .l{flex:1;font-size:12.5px;color:var(--text2);font-weight:500}
+.hdr-disc .p{font-size:17px;font-weight:800;color:var(--gold);text-shadow:0 0 10px rgba(251,191,36,.25)}
+
+/* === SEARCH === */
+.srch{padding:14px 16px 6px;animation:fadeUp .4s .12s both}
+.srch-b{position:relative}
+.srch-b .i{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;opacity:.35;pointer-events:none}
+.srch-b input{
+width:100%;padding:12px 16px 12px 38px;border-radius:14px;
+border:1px solid var(--border);background:var(--card);color:var(--text);
+font-size:14px;font-weight:500;outline:none;transition:.3s
+}
+.srch-b input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-g)}
+.srch-b input::placeholder{color:var(--hint);font-weight:400}
+
+/* === CATEGORIES === */
+.cats{padding:6px 16px 8px;overflow-x:auto;display:flex;gap:7px}
+.cat{
+flex-shrink:0;padding:8px 16px;border-radius:22px;
+border:1px solid var(--border);background:var(--card);
+color:var(--text2);font-size:12.5px;font-weight:600;
+transition:.25s;white-space:nowrap
+}
+.cat:active{transform:scale(.92)}
+.cat.on{
+background:linear-gradient(135deg,var(--accent),#6d5dd3);
+border-color:transparent;color:#fff;
+box-shadow:0 4px 16px var(--accent-g)
+}
+
+/* === GRID === */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:6px 16px 100px}
+.pc{
+background:var(--card);border-radius:16px;overflow:hidden;
+border:1px solid var(--border);cursor:pointer;
+transition:.3s;position:relative
+}
 .pc:active{transform:scale(.97)}
-.pi{width:100%;aspect-ratio:1;object-fit:cover;background:var(--bg2)}
-.pf{padding:10px}
-.pn{font-size:13px;font-weight:600;line-height:1.3;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pp{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.pr{font-size:16px;font-weight:800;color:var(--accent)}
-.po{font-size:12px;color:var(--hint);text-decoration:line-through}
-.dt{font-size:10px;background:var(--no);color:#fff;padding:2px 6px;border-radius:4px;font-weight:700}
-.pep{font-size:11px;color:var(--gold);margin-top:2px}
-.mo{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
-.mo.a{display:flex}
-.pd{background:var(--bg);width:100%;max-height:92vh;border-radius:20px 20px 0 0;overflow-y:auto;animation:su .3s ease}
-@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.dc{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;font-size:18px;color:#fff}
-.di{position:relative;width:100%;aspect-ratio:1;overflow:hidden}
-.di img{width:100%;height:100%;object-fit:cover}
-.ic{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.6);padding:4px 10px;border-radius:12px;font-size:12px}
-.ids{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
-.ido{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);transition:.3s}
-.ido.a{background:#fff;width:20px;border-radius:4px}
-.dbd{padding:20px 16px}
-.dn{font-size:20px;font-weight:800;margin-bottom:8px}
-.dd{font-size:14px;color:var(--hint);line-height:1.5;margin-bottom:16px}
-.dpr{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.dprc{font-size:26px;font-weight:800;color:var(--accent)}
-.dpro{font-size:16px;color:var(--hint);text-decoration:line-through}
-.ddi{background:var(--card);border-radius:var(--rs);padding:12px;margin-bottom:16px;border:1px solid var(--border)}
-.ddt{font-size:14px;font-weight:700;margin-bottom:8px}
-.ddr{display:flex;justify-content:space-between;font-size:13px;padding:3px 0}
-.ddr .l{color:var(--hint)}.ddr .v{font-weight:600;color:var(--ok)}
-.qs{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.qb{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.qb:active{background:var(--accent)}
-.qv{font-size:20px;font-weight:700;min-width:30px;text-align:center}
-.atc{width:100%;padding:16px;border-radius:var(--r);border:none;background:var(--accent);color:#fff;font-size:16px;font-weight:700;cursor:pointer;transition:.2s}
-.atc:active{background:var(--accent2);transform:scale(.98)}
-.cp{position:fixed;inset:0;background:var(--bg);z-index:300;transform:translateX(100%);transition:.3s ease;display:flex;flex-direction:column}
-.cp.o{transform:translateX(0)}
-.ch{display:flex;align-items:center;justify-content:space-between;padding:16px;border-bottom:1px solid var(--border)}
-.ctl{font-size:20px;font-weight:800}
-.cc{font-size:24px;cursor:pointer;padding:4px}
-.cis{flex:1;overflow-y:auto;padding:16px}
-.ci{display:flex;gap:12px;padding:12px;background:var(--card);border-radius:var(--rs);margin-bottom:10px;border:1px solid var(--border)}
-.cig{width:70px;height:70px;border-radius:8px;object-fit:cover;flex-shrink:0}
-.cii{flex:1;min-width:0}
-.cin{font-size:13px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cip{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:8px}
-.cic{display:flex;align-items:center;gap:10px}
-.cqb{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.cir{color:var(--no);cursor:pointer;font-size:18px;margin-left:auto}
-.ce{text-align:center;padding:60px 20px;color:var(--hint)}
-.cei{font-size:60px;margin-bottom:12px}
-.cf{padding:16px;border-top:1px solid var(--border);background:var(--bg2)}
-.cpm{display:flex;gap:8px;margin-bottom:12px}
-.cpm input{flex:1;padding:10px 14px;border-radius:var(--rs);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:14px;outline:0}
-.cpm button{padding:10px 16px;border-radius:var(--rs);border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:600;cursor:pointer}
-.cs{margin-bottom:12px}
-.csr{display:flex;justify-content:space-between;font-size:14px;padding:4px 0}
-.csr.t{font-size:18px;font-weight:800;color:var(--accent);border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
-.cob{width:100%;padding:16px;border-radius:var(--r);border:none;background:var(--ok);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
-.cob:disabled{opacity:.5;cursor:not-allowed}
-.pp2{position:fixed;inset:0;background:var(--bg);z-index:300;transform:translateX(100%);transition:.3s ease;overflow-y:auto}
-.pp2.o{transform:translateX(0)}
-.ph{padding:20px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
-.pb{font-size:24px;cursor:pointer}
-.pc2{padding:16px}
-.pcd{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:12px;border:1px solid var(--border)}
-.pcd h3{font-size:15px;margin-bottom:10px}
-.prw{display:flex;justify-content:space-between;padding:6px 0;font-size:13px}
-.prw .l{color:var(--hint)}.prw .v{font-weight:600}
-.tst{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);color:var(--text);padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:600;z-index:500;transition:.3s ease;box-shadow:var(--sh);border:1px solid var(--border)}
-.tst.s{transform:translateX(-50%) translateY(0)}
-.ld{display:flex;justify-content:center;padding:40px}
-.sp{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spn .8s linear infinite}
-@keyframes spn{to{transform:rotate(360deg)}}
-.sec{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--ok);padding:2px 8px;background:rgba(76,175,80,.1);border-radius:10px}
+.pc .bdg{
+position:absolute;top:8px;left:8px;z-index:5;
+background:linear-gradient(135deg,var(--accent),#a855f7);
+color:#fff;font-size:9.5px;font-weight:700;padding:3px 9px;
+border-radius:8px;box-shadow:0 2px 8px var(--accent-g);letter-spacing:.2px
+}
+.pc .fv{
+position:absolute;top:8px;right:8px;z-index:5;
+width:30px;height:30px;border-radius:50%;
+background:rgba(0,0,0,.4);backdrop-filter:blur(6px);
+display:flex;align-items:center;justify-content:center;
+font-size:13px;transition:.2s;border:1px solid rgba(255,255,255,.05)
+}
+.pc .fv:active{transform:scale(.8)}
+.pc .fv.on{animation:heartPop .4s ease}
+.pc .iw{overflow:hidden;position:relative;aspect-ratio:1;background:var(--bg2)}
+.pc .iw img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.pc:active .iw img{transform:scale(1.04)}
+.pc .inf{padding:9px 10px 11px}
+.pc .nm{font-size:12px;font-weight:600;line-height:1.35;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc .pr{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.pc .prv{font-size:14px;font-weight:800;color:var(--accent)}
+.pc .old{font-size:10.5px;color:var(--hint);text-decoration:line-through}
+.pc .pct{font-size:8.5px;background:var(--no);color:#fff;padding:2px 5px;border-radius:5px;font-weight:700}
+.pc .pers{
+font-size:9.5px;color:var(--gold);margin-top:3px;
+display:flex;align-items:center;gap:2px;
+background:var(--gold-bg);padding:2px 7px;
+border-radius:6px;width:fit-content;font-weight:600
+}
+
+/* === EMPTY === */
+.emp{text-align:center;padding:60px 20px;color:var(--hint);grid-column:1/-1}
+.emp .i{font-size:44px;margin-bottom:10px;animation:float 3s ease-in-out infinite}
+.emp .m{font-size:14px;font-weight:600;margin-bottom:3px}
+.emp .s{font-size:11.5px;opacity:.6}
+
+/* === OVERLAY === */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(5px)}
+.ov.op{display:flex;animation:fadeIn .2s ease}
+
+/* === DETAIL === */
+.sht{
+background:var(--bg);width:100%;max-width:500px;max-height:92vh;
+border-radius:22px 22px 0 0;overflow-y:auto;
+animation:slideUp .4s cubic-bezier(.22,1,.36,1)
+}
+.sht-h{display:flex;justify-content:center;padding:10px 0 4px}
+.sht-h span{width:34px;height:4px;border-radius:3px;background:rgba(255,255,255,.1)}
+.di-w{position:relative;width:100%;aspect-ratio:1;overflow:hidden;background:var(--bg2)}
+.di-w img{width:100%;height:100%;object-fit:cover;transition:opacity .3s ease}
+.di-cls{
+position:absolute;top:12px;right:12px;width:36px;height:36px;
+border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);
+display:flex;align-items:center;justify-content:center;font-size:16px;z-index:5;transition:.2s
+}
+.di-cls:active{transform:scale(.85)}
+.di-fv{
+position:absolute;top:12px;left:12px;width:36px;height:36px;
+border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);
+display:flex;align-items:center;justify-content:center;font-size:15px;z-index:5;transition:.2s
+}
+.di-fv:active{transform:scale(.85)}
+.di-fv.on{animation:heartPop .4s ease}
+.di-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
+.di-dot{height:5px;border-radius:3px;background:rgba(255,255,255,.2);transition:.3s;cursor:pointer}
+.di-dot.on{background:#fff;width:18px}.di-dot:not(.on){width:5px}
+.di-arr button{
+position:absolute;top:50%;transform:translateY(-50%);
+width:32px;height:32px;border-radius:50%;
+background:rgba(0,0,0,.4);backdrop-filter:blur(4px);
+display:flex;align-items:center;justify-content:center;
+font-size:14px;transition:.2s;color:#fff
+}
+.di-arr button:active{transform:translateY(-50%) scale(.85)}
+.di-arr .lt{left:8px}.di-arr .rt{right:8px}
+.di-body{padding:18px 16px 30px}
+.di-nm{font-size:20px;font-weight:800;line-height:1.3;margin-bottom:10px;letter-spacing:-.3px}
+.di-desc{font-size:13.5px;color:var(--hint);line-height:1.6;margin-bottom:18px}
+.di-prr{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.di-prv{font-size:26px;font-weight:900;color:var(--accent);letter-spacing:-.5px}
+.di-old{font-size:15px;color:var(--hint);text-decoration:line-through}
+.di-save{font-size:11px;color:var(--ok);background:var(--ok-bg);padding:3px 8px;border-radius:6px;font-weight:600;margin-left:2px}
+.dsc-box{
+background:linear-gradient(135deg,var(--card),var(--card2));
+border-radius:14px;padding:14px;margin:14px 0;
+border:1px solid var(--border);position:relative;overflow:hidden
+}
+.dsc-box::before{
+content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.02),transparent);
+animation:shimmer 3.5s ease-in-out infinite
+}
+.dsc-box .tt{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;margin-bottom:10px;color:var(--gold)}
+.dsc-r{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0}
+.dsc-r .l{color:var(--hint)}.dsc-r .v{font-weight:600;color:var(--ok)}
+.dsc-t{border-top:1px solid var(--border);padding-top:7px;margin-top:5px;font-weight:700;font-size:13px}
+.dsc-f{
+border-top:1px solid rgba(251,191,36,.1);padding-top:10px;margin-top:7px;
+display:flex;justify-content:space-between;align-items:center;
+background:var(--gold-bg);margin:-0 -14px -14px;padding:12px 14px;
+border-radius:0 0 14px 14px
+}
+.dsc-f .l{color:var(--gold);font-weight:700;font-size:13px;display:flex;align-items:center;gap:5px}
+.dsc-f .v{color:var(--gold);font-weight:900;font-size:20px}
+.qt-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.qt-lbl{font-size:13px;color:var(--hint);font-weight:500}
+.qt-ctrl{display:flex;align-items:center;gap:0;background:var(--card);border-radius:26px;padding:3px;border:1px solid var(--border)}
+.qt-b{
+width:36px;height:36px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:17px;transition:.15s;font-weight:600
+}
+.qt-b:active{background:var(--accent);color:#fff;transform:scale(.88)}
+.qt-v{font-size:16px;font-weight:700;min-width:28px;text-align:center}
+.add-btn{
+width:100%;padding:15px;border-radius:14px;
+background:linear-gradient(135deg,var(--accent),#6d5dd3);
+color:#fff;font-size:15px;font-weight:700;
+transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;
+box-shadow:0 6px 24px var(--accent-g);letter-spacing:-.2px
+}
+.add-btn:active{transform:scale(.97);box-shadow:0 3px 12px var(--accent-g)}
+
+/* === CART === */
+.cpan{
+position:fixed;inset:0;background:var(--bg);z-index:300;
+transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);
+display:flex;flex-direction:column
+}
+.cpan.op{transform:translateX(0)}
+.c-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)}
+.c-hd .t{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:800}
+.c-hd .cn{font-size:10px;background:rgba(124,106,255,.12);color:var(--accent);padding:2px 8px;border-radius:14px;font-weight:700}
+.c-hd .x{width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;transition:.2s}
+.c-hd .x:active{transform:scale(.85)}
+.c-list{flex:1;overflow-y:auto;padding:12px 16px}
+.c-it{
+display:flex;gap:11px;padding:11px;
+background:var(--card);border-radius:13px;
+margin-bottom:8px;border:1px solid var(--border);
+animation:fadeUp .3s ease both
+}
+.c-it img{width:62px;height:62px;border-radius:9px;object-fit:cover;flex-shrink:0;background:var(--bg2)}
+.c-it .inf{flex:1;min-width:0}
+.c-it .nm{font-size:12px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-it .pr{font-size:13px;font-weight:700;color:var(--accent);margin-bottom:6px}
+.c-it .cts{display:flex;align-items:center;gap:7px}
+.c-it .qb{
+width:26px;height:26px;border-radius:50%;
+border:1px solid var(--border);background:var(--bg2);
+display:flex;align-items:center;justify-content:center;font-size:13px;transition:.2s
+}
+.c-it .qb:active{background:var(--accent);border-color:var(--accent);color:#fff;transform:scale(.85)}
+.c-it .qv{font-size:12px;font-weight:700;min-width:16px;text-align:center}
+.c-it .dl{margin-left:auto;font-size:14px;opacity:.35;transition:.2s}
+.c-it .dl:active{opacity:1;transform:scale(.85)}
+.c-emp{text-align:center;padding:70px 20px;color:var(--hint)}
+.c-emp .i{font-size:48px;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+.c-emp .m{font-size:14px;font-weight:600;margin-bottom:3px}
+.c-emp .s{font-size:11.5px;opacity:.6}
+.c-ft{padding:14px 16px;border-top:1px solid var(--border);background:var(--bg2)}
+.prm-r{display:flex;gap:7px;margin-bottom:12px}
+.prm-r input{flex:1;padding:10px 13px;border-radius:var(--r2);border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12.5px;outline:none;transition:.3s}
+.prm-r input:focus{border-color:var(--accent)}
+.prm-r input::placeholder{color:var(--hint)}
+.prm-r button{padding:10px 16px;border-radius:var(--r2);background:var(--accent);color:#fff;font-size:12.5px;font-weight:600;transition:.2s}
+.prm-r button:active{background:var(--accent2);transform:scale(.95)}
+.c-sum{margin-bottom:12px}
+.c-sum .r{display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0;color:var(--text2)}
+.c-sum .r.d{color:var(--ok)}
+.c-sum .r.tot{font-size:16px;font-weight:800;color:var(--accent);border-top:1px solid var(--border);padding-top:8px;margin-top:5px}
+.ord-btn{
+width:100%;padding:15px;border-radius:var(--r);
+background:linear-gradient(135deg,var(--ok),#16a34a);
+color:#fff;font-size:14.5px;font-weight:700;
+transition:.2s;display:flex;align-items:center;justify-content:center;gap:7px;
+box-shadow:0 4px 18px rgba(34,197,94,.18);letter-spacing:-.2px
+}
+.ord-btn:active{transform:scale(.97)}
+.ord-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* === PROFILE === */
+.ppan{
+position:fixed;inset:0;background:var(--bg);z-index:300;
+transform:translateX(100%);transition:transform .35s cubic-bezier(.22,1,.36,1);
+overflow-y:auto
+}
+.ppan.op{transform:translateX(0)}
+.p-hd{
+display:flex;align-items:center;gap:12px;
+padding:14px 16px;border-bottom:1px solid var(--border);
+position:sticky;top:0;background:rgba(10,10,22,.9);
+backdrop-filter:blur(14px);z-index:5
+}
+.p-hd .bk{font-size:20px;transition:.2s;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border)}
+.p-hd .bk:active{transform:scale(.85)}
+.p-hd .t{font-size:17px;font-weight:800}
+.p-bd{padding:14px 16px 80px;display:flex;flex-direction:column;gap:12px}
+.p-cd{
+background:var(--card);border-radius:16px;padding:16px;
+border:1px solid var(--border);animation:fadeUp .4s ease both
+}
+.p-cd:nth-child(2){animation-delay:.08s}
+.p-cd:nth-child(3){animation-delay:.16s}
+.p-cd:nth-child(4){animation-delay:.24s}
+.p-cd.usr{
+background:linear-gradient(135deg,rgba(124,106,255,.06),rgba(168,85,247,.04));
+border-color:rgba(124,106,255,.1)
+}
+.p-cd h3{font-size:13.5px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px;letter-spacing:-.1px}
+.p-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12.5px}
+.p-row .l{color:var(--hint);display:flex;align-items:center;gap:5px}
+.p-row .v{font-weight:600}
+.p-row .v.ok{color:var(--ok)}.p-row .v.gold{color:var(--gold)}.p-row .v.ac{color:var(--accent)}
+.p-av{
+width:48px;height:48px;border-radius:50%;
+background:linear-gradient(135deg,var(--accent),#a855f7);
+display:flex;align-items:center;justify-content:center;
+font-size:20px;animation:pulse 2.5s ease-in-out infinite;flex-shrink:0
+}
+.id-bx{
+display:flex;align-items:center;gap:7px;
+background:rgba(0,0,0,.2);border-radius:var(--r2);
+padding:9px 12px;margin-top:10px;border:1px solid rgba(34,197,94,.06)
+}
+.id-bx .sh{font-size:13px;flex-shrink:0}
+.id-bx .lb{font-size:10px;color:var(--hint);flex:1}
+.id-bx .vl{font-size:11.5px;font-family:'SF Mono',SFMono-Regular,Consolas,monospace;font-weight:600;color:var(--ok)}
+.id-bx .cp{font-size:12px;opacity:.35;transition:.2s;margin-left:3px}
+.id-bx .cp:active{opacity:1;transform:scale(.85)}
+.dsc-big{
+background:linear-gradient(135deg,var(--gold-bg),rgba(217,119,6,.03));
+border-radius:12px;padding:14px;margin-bottom:12px;
+border:1px solid rgba(251,191,36,.06);text-align:center
+}
+.dsc-big .lb{font-size:10px;color:var(--hint);margin-bottom:1px;text-transform:uppercase;letter-spacing:.5px}
+.dsc-big .vl{font-size:38px;font-weight:900;color:var(--gold);text-shadow:0 0 16px rgba(251,191,36,.15);animation:countPop .6s .3s both}
+.dd-r{
+display:flex;align-items:center;justify-content:space-between;
+padding:8px 11px;border-radius:var(--r2);background:rgba(0,0,0,.12);margin-bottom:5px
+}
+.dd-r .l{font-size:12px;display:flex;align-items:center;gap:5px}
+.dd-r .l.off{opacity:.25}
+.dd-r .v{font-size:12px;font-weight:600}
+.dd-r .v.ok{color:var(--ok)}.dd-r .v.off{opacity:.25}
+.fh{
+margin-top:8px;padding:9px 12px;
+background:var(--ok-bg);border-radius:var(--r2);
+border:1px solid rgba(34,197,94,.08);
+font-size:12px;color:var(--ok);font-weight:500;
+display:flex;align-items:center;gap:7px
+}
+.rf-st{display:flex;gap:10px;margin-bottom:14px}
+.rf-s{flex:1;text-align:center;background:rgba(0,0,0,.12);border-radius:var(--r2);padding:10px 6px}
+.rf-s .lb{font-size:9px;color:var(--hint);margin-bottom:1px;text-transform:uppercase;letter-spacing:.3px}
+.rf-s .vl{font-size:18px;font-weight:800;color:var(--accent)}
+.rf-s .lv{font-size:12px;font-weight:700}
+.prg-r{margin-bottom:7px}
+.prg-r .tp{display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:3px}
+.prg-r .tp .l{color:var(--hint)}.prg-r .tp .r{color:var(--hint)}
+.prg-r .tp .l.dn{font-weight:600;color:var(--text)}.prg-r .tp .r.dn{font-weight:600;color:var(--ok)}
+.prg-b{height:4px;background:var(--border);border-radius:3px;overflow:hidden}
+.prg-f{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.22,1,.36,1);width:0}
+.prg-f.ok{background:linear-gradient(90deg,var(--ok),#16a34a)}
+.prg-f.ac{background:linear-gradient(90deg,var(--accent),#a855f7)}
+
+/* === TOAST === */
+.tst{
+position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(70px);
+background:var(--card2);color:var(--text);padding:12px 22px;border-radius:var(--r);
+font-size:13px;font-weight:600;z-index:600;
+transition:.4s cubic-bezier(.22,1,.36,1);
+box-shadow:var(--sh);border:1px solid var(--border);
+backdrop-filter:blur(14px);white-space:nowrap;pointer-events:none;
+max-width:calc(100vw - 40px)
+}
+.tst.sh{transform:translateX(-50%) translateY(0)}
+
+#root{display:none}
 </style>
 </head>
 <body>
 
-<div class="hd" id="header">
-<div class="ht">
-<div><div class="sn">🛍 Saturn</div><div class="sec" id="secBadge" style="display:none">🔒 Secure</div></div>
-<div class="hi">
-<div class="hib" onclick="openProfile()">👤</div>
-<div class="hib" onclick="openCart()">🛒<div class="cb" id="cartBadge" style="display:none">0</div></div>
+<div class="hdr">
+<div class="hdr-top" id="hdTop">
+<div class="hdr-logo">
+<span class="hdr-planet">🪐</span>
+<span class="hdr-name">Saturn</span>
+<span class="hdr-sec">🔒 Secure</span>
+</div>
+<div class="hdr-btns">
+<button class="hdr-b" onclick="S.openProf()">👤</button>
+<button class="hdr-b" onclick="S.openCart()">🛒<span class="hdr-badge" id="cBadge" style="display:none">0</span></button>
 </div>
 </div>
-<div class="db" id="discBanner" onclick="openProfile()" style="display:none">
-<span class="e">🎁</span><span class="t" id="discText">Загрузка...</span><span class="p" id="discPct"></span>
-</div>
-</div>
-
-<div class="sb"><span class="sic">🔍</span><input class="si" type="text" placeholder="Поиск товаров..." id="searchInput" oninput="filterProducts()"></div>
-<div class="cats" id="catsBox"></div>
-<div class="pg" id="prodGrid"><div class="ld"><div class="sp"></div></div></div>
-
-<div class="mo" id="prodModal"><div class="pd" id="prodDetail"></div></div>
-
-<div class="cp" id="cartPanel">
-<div class="ch"><span class="ctl">🛒 Корзина</span><span class="cc" onclick="closeCart()">✕</span></div>
-<div class="cis" id="cartItems"></div>
-<div class="cf" id="cartFooter" style="display:none">
-<div class="cpm"><input type="text" placeholder="Промокод" id="promoInput" maxlength="20"><button onclick="applyPromo()">Применить</button></div>
-<div class="cs" id="cartSum"></div>
-<button class="cob" id="orderBtn" onclick="submitOrder()">📦 Оформить заказ</button>
+<div class="hdr-disc" id="dBanner" style="display:none" onclick="S.openProf()">
+<span class="i">🎁</span>
+<span class="l">Ваша персональная скидка</span>
+<span class="p" id="dPct"></span>
 </div>
 </div>
 
-<div class="pp2" id="profPanel">
-<div class="ph"><span class="pb" onclick="closeProfile()">←</span><span style="font-size:18px;font-weight:700">👤 Профиль</span></div>
-<div class="pc2" id="profContent"><div class="ld"><div class="sp"></div></div></div>
+<div class="srch"><div class="srch-b"><span class="i">🔍</span><input type="text" placeholder="Поиск товаров..." id="sInp" oninput="S.filter()"></div></div>
+<div class="cats" id="cBox"></div>
+<div class="grid" id="pGrid"></div>
+
+<div class="ov" id="dOv" onclick="if(event.target===this)S.closeDet()"><div class="sht" id="dSht"></div></div>
+
+<div class="cpan" id="cPan">
+<div class="c-hd"><div class="t">🛒 Корзина <span class="cn" id="cCnt" style="display:none">0</span></div><button class="x" onclick="S.closeCart()">✕</button></div>
+<div class="c-list" id="cList"></div>
+<div class="c-ft" id="cFt" style="display:none">
+<div class="prm-r"><input type="text" placeholder="Промокод" id="pmInp" maxlength="20"><button onclick="S.applyPm()">Применить</button></div>
+<div class="c-sum" id="cSum"></div>
+<button class="ord-btn" id="oBtn" onclick="S.order()">📦 Оформить заказ</button>
+</div>
 </div>
 
-<div class="tst" id="toast"></div>
+<div class="ppan" id="pPan">
+<div class="p-hd"><button class="bk" onclick="S.closeProf()">←</button><span class="t">Профиль</span></div>
+<div class="p-bd" id="pBd"></div>
+</div>
+
+<div class="tst" id="tst"></div>
+<div id="root"></div>
+<script type="module" src="/src/main.tsx"></script>
 
 <script>
-const A={
-tg:null,user:null,initData:'',initDataUnsafe:null,apiUrl:'',
-products:[],categories:[],cart:[],userDiscount:null,config:null,
-activeCat:'all',curProd:null,curQty:1,curImgIdx:0,prodImgs:[],
+var S={
+tg:null,user:null,initData:'',
+products:[],categories:[],cart:[],favs:[],
+disc:null,aCat:'all',search:'',
+cur:null,curQ:1,curI:0,tx:0,_tt:0,
 
-async init(){
+/* ======== ПОМЕНЯЙТЕ НА USERNAME ВАШЕГО БОТА ИЛИ ЧАТА ======== */
+CHAT_USERNAME:'saturn_shop_bot',
+/* ============================================================ */
+
+CATS:[
+{slug:'all',name:'Все',e:'🏪'},
+{slug:'electronics',name:'Электроника',e:'📱'},
+{slug:'clothing',name:'Одежда',e:'👕'},
+{slug:'accessories',name:'Аксессуары',e:'⌚'},
+{slug:'home',name:'Для дома',e:'🏠'},
+{slug:'sports',name:'Спорт',e:'⚽'}
+],
+
+PRODS:[
+{id:1,name:'Беспроводные наушники Pro Max',desc:'Премиальные наушники с активным шумоподавлением ANC, кристально чистым звуком Hi-Res Audio и 30 часами автономной работы. Bluetooth 5.3, кодеки AAC, LDAC и aptX HD.',price:4990,old:7990,cat:'electronics',imgs:['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop','https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&h=500&fit=crop'],badge:'🔥 Хит'},
+{id:2,name:'Смарт-часы Galaxy Fit',desc:'Стильные умные часы с AMOLED 1.4", мониторинг здоровья 24/7, GPS и IP68. До 14 дней автономности.',price:8990,old:12990,cat:'accessories',imgs:['https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop'],badge:'⌚ Топ'},
+{id:3,name:'Худи Premium Oversize',desc:'Комфортное худи из плотного хлопка 320 г/м². Оверсайз крой, флисовая подкладка, фурнитура YKK.',price:3490,old:4990,cat:'clothing',imgs:['https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop']},
+{id:4,name:'Портативная колонка Bass+',desc:'Мощный стерео звук 20Вт с технологией Extra Bass. Защита IPX7, RGB подсветка, поддержка TWS.',price:2990,old:4490,cat:'electronics',imgs:['https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&h=500&fit=crop'],badge:'✨ Новинка'},
+{id:5,name:'Рюкзак Urban Tech',desc:'Городской рюкзак с USB-портом, отделением для ноутбука 15.6" и антивор-карманом. Ткань Oxford 900D.',price:2490,old:0,cat:'accessories',imgs:['https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=500&fit=crop']},
+{id:6,name:'LED-лампа настольная Smart',desc:'Регулировка яркости и температуры 2700-6500K. Встроенная Qi-зарядка. Сенсорное управление.',price:1990,old:2990,cat:'home',imgs:['https://images.unsplash.com/photo-1507473885765-e6ed057ab6fe?w=500&h=500&fit=crop']},
+{id:7,name:'Кроссовки Air Comfort Pro',desc:'Инновационная амортизация Air Cushion, дышащий Flyknit верх. Идеальны для бега и повседневной носки.',price:5990,old:8990,cat:'sports',imgs:['https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&h=500&fit=crop'],badge:'🏆 Топ'},
+{id:8,name:'Фитнес-браслет Active Band',desc:'Точный пульсометр, шагомер, мониторинг сна. Push-уведомления, AMOLED дисплей. Батарея 7 дней.',price:1490,old:2490,cat:'accessories',imgs:['https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=500&h=500&fit=crop']},
+{id:9,name:'Термокружка Steel Pro 500ml',desc:'Нержавеющая сталь 18/10, двойные вакуумные стенки. Тепло 12ч, холод 24ч. Герметичная крышка.',price:1290,old:0,cat:'home',imgs:['https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&h=500&fit=crop']},
+{id:10,name:'Футболка Classic Organic',desc:'100% органический хлопок GOTS. Не садится, не выцветает. Прямой крой унисекс.',price:1290,old:1990,cat:'clothing',imgs:['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop']},
+{id:11,name:'Механическая клавиатура RGB',desc:'Компакт 65%, переключатели Gateron Brown. RGB подсветка 16.8M, Hot-swap, PBT кейкапы.',price:3990,old:5490,cat:'electronics',imgs:['https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=500&h=500&fit=crop'],badge:'⌨️ Геймер'},
+{id:12,name:'Коврик для йоги Eco',desc:'Натуральный каучук, антискользящее покрытие. 6мм, 183×61 см. Ремень для переноски.',price:1790,old:0,cat:'sports',imgs:['https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=500&h=500&fit=crop']}
+],
+
+init:function(){
+this.products=this.PRODS;this.categories=this.CATS;
+this.disc={total:15,referral:5,admin:0,review:5,promo:5,promo_code:'SATURN15',first_order_used:false,ref_level:'silver',ref_count:7};
+this.ldCart();this.ldFav();
 try{
-this.tg=window.Telegram?.WebApp;
-if(!this.tg){this.showErr('Откройте через Telegram бот');return}
-this.tg.ready();this.tg.expand();this.applyTheme();
-this.initData=this.tg.initData;this.initDataUnsafe=this.tg.initDataUnsafe;
-this.user=this.initDataUnsafe?.user||null;
-await this.fetchConfig();
-await Promise.all([this.loadProducts(),this.loadCategories(),this.loadUserDiscount()]);
-this.loadCart();
-if(this.initData){const b=document.getElementById('secBadge');if(b)b.style.display='inline-flex'}
-}catch(e){console.error(e);this.toast('❌ Ошибка загрузки')}
+this.tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null;
+if(this.tg){this.tg.ready();this.tg.expand();this.initData=this.tg.initData||'';var u=this.tg.initDataUnsafe&&this.tg.initDataUnsafe.user;if(u)this.user=u}
+}catch(e){}
+if(!this.user)this.user={id:798254137,first_name:'Александр',username:'alexander_dev'};
+this.rCats();this.rProds();this.uBadge();this.uDisc()
 },
 
-async fetchConfig(){
-const m=document.querySelector('meta[name="api-url"]');
-let u=m?.content||'';
-if(u){try{const r=await fetch(`${u}/api/config`);if(r.ok){this.config=await r.json();this.apiUrl=this.config.api_url;return}}catch(e){}}
-this.apiUrl=window.__API_URL__||'';
+esc:function(t){if(!t)return'';var m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};return String(t).replace(/[&<>"']/g,function(c){return m[c]})},
+hid:function(id){var h=0,s=String(id);for(var i=0;i<s.length;i++)h=((h<<5)-h+s.charCodeAt(i))|0;var x=Math.abs(h).toString(16).toUpperCase().padStart(8,'0');return'USR-'+x.slice(0,4)+'-'+x.slice(4,8)},
+msk:function(s){if(!s||s.length<=4)return s||'';return s.slice(0,2)+'•'.repeat(Math.min(s.length-3,5))+s.slice(-1)},
+toast:function(m){var t=document.getElementById('tst');t.textContent=m;t.classList.add('sh');clearTimeout(this._tt);this._tt=setTimeout(function(){t.classList.remove('sh')},2800)},
+hap:function(t){try{if(S.tg&&S.tg.HapticFeedback)S.tg.HapticFeedback.notificationOccurred(t||'success')}catch(e){}},
+fmt:function(n){return n.toLocaleString('ru-RU')},
+
+svCart:function(){try{localStorage.setItem('s_c',JSON.stringify(this.cart))}catch(e){}},
+ldCart:function(){try{var s=localStorage.getItem('s_c');this.cart=s?JSON.parse(s):[]}catch(e){this.cart=[]}},
+svFav:function(){try{localStorage.setItem('s_f',JSON.stringify(this.favs))}catch(e){}},
+ldFav:function(){try{var s=localStorage.getItem('s_f');this.favs=s?JSON.parse(s):[]}catch(e){this.favs=[]}},
+
+rCats:function(){
+var self=this;
+document.getElementById('cBox').innerHTML=this.categories.map(function(c,i){
+return'<button class="cat'+(self.aCat===c.slug?' on':'')+'" onclick="S.setCat(\''+c.slug+'\')" style="animation:scaleIn .35s '+(.18+i*.04)+'s both">'+c.e+' '+self.esc(c.name)+'</button>'
+}).join('')
 },
+setCat:function(s){this.aCat=s;this.rCats();this.rProds()},
 
-async apiReq(ep,opt={}){
-if(!this.apiUrl)throw new Error('No API');
-const h={'Content-Type':'application/json',...opt.headers};
-if(this.initData)h['Authorization']=`Bearer ${this.initData}`;
-const r=await fetch(`${this.apiUrl}${ep}`,{...opt,headers:h});
-if(r.status===401)this.toast('⚠️ Сессия истекла');
-if(r.status===403)this.toast('⛔ Доступ запрещён');
-if(r.status===429)this.toast('⏳ Слишком много запросов');
-if(r.status>=400)throw new Error(r.status);
-return r;
-},
+filter:function(){this.search=(document.getElementById('sInp').value||'').toLowerCase();this.rProds()},
 
-uid(){return this.user?.id||0},
-
-applyTheme(){
-if(!this.tg?.themeParams)return;const t=this.tg.themeParams,s=document.documentElement.style;
-if(t.bg_color)s.setProperty('--bg',t.bg_color);
-if(t.text_color)s.setProperty('--text',t.text_color);
-if(t.hint_color)s.setProperty('--hint',t.hint_color);
-if(t.button_color){s.setProperty('--accent',t.button_color)}
-if(t.secondary_bg_color)s.setProperty('--bg2',t.secondary_bg_color);
-},
-
-async loadProducts(){
-try{const r=await fetch(`${this.apiUrl}/api/products`);const d=await r.json();this.products=d.products||[];this.renderProds()}
-catch(e){document.getElementById('prodGrid').innerHTML='<div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--hint)">😔 Не удалось загрузить товары</div>'}
-},
-
-async loadCategories(){
-try{const r=await fetch(`${this.apiUrl}/api/categories`);const d=await r.json();this.categories=d.categories||[];this.renderCats()}catch(e){}
-},
-
-async loadUserDiscount(){
-const u=this.uid();if(!u||!this.initData)return;
-try{const r=await this.apiReq(`/api/user/${u}`);const d=await r.json();this.userDiscount=d.discount;this.updDiscBanner()}catch(e){}
-},
-
-async loadProdDisc(pid){
-const u=this.uid();if(!u||!this.initData)return null;
-try{const r=await this.apiReq(`/api/user/${u}/product/${pid}`);const d=await r.json();return d.discount}catch(e){return null}
-},
-
-renderCats(){
-const c=document.getElementById('catsBox');if(!c)return;
-let h=`<button class="ct ${this.activeCat==='all'?'a':''}" onclick="A.setCat('all')">🏪 Все</button>`;
-this.categories.forEach(cat=>{if(cat.slug==='all')return;h+=`<button class="ct ${this.activeCat===cat.slug?'a':''}" onclick="A.setCat('${this.esc(cat.slug)}')">${this.esc(cat.name)}</button>`});
-c.innerHTML=h;
-},
-
-renderProds(){
-const g=document.getElementById('prodGrid');if(!g)return;
-const s=(document.getElementById('searchInput')?.value||'').toLowerCase();
-let f=this.products.filter(p=>{
-if(this.activeCat!=='all'&&p.category!==this.activeCat)return false;
-if(s&&!p.name.toLowerCase().includes(s)&&!(p.description||'').toLowerCase().includes(s))return false;
-return true;
+rProds:function(){
+var g=document.getElementById('pGrid'),self=this;
+var list=this.products.filter(function(p){
+if(self.aCat!=='all'&&p.cat!==self.aCat)return false;
+if(self.search&&p.name.toLowerCase().indexOf(self.search)<0&&p.desc.toLowerCase().indexOf(self.search)<0)return false;
+return true
 });
-if(!f.length){g.innerHTML='<div style="text-align:center;padding:40px;grid-column:1/-1;color:var(--hint)">😔 Товары не найдены</div>';return}
-g.innerHTML=f.map(p=>this.prodCard(p)).join('');
+if(!list.length){g.innerHTML='<div class="emp"><div class="i">🔍</div><div class="m">Товары не найдены</div><div class="s">Попробуйте изменить запрос</div></div>';return}
+g.innerHTML=list.map(function(p,i){
+var ho=p.old&&p.old>0,pct=ho?Math.round((1-p.price/p.old)*100):0;
+var d=self.disc,pp=d&&d.total>0?Math.round(p.price*(1-d.total/100)):null;
+var fav=self.favs.indexOf(p.id)>=0;
+return'<div class="pc" onclick="S.openDet('+p.id+')" style="animation:fadeUp .4s '+(i*.04)+'s both">'
++(p.badge?'<div class="bdg">'+p.badge+'</div>':'')
++'<button class="fv'+(fav?' on':'')+'" onclick="event.stopPropagation();S.togFav('+p.id+')">'+(fav?'❤️':'🤍')+'</button>'
++'<div class="iw"><img src="'+self.esc(p.imgs[0])+'" alt="'+self.esc(p.name)+'" loading="lazy" onerror="this.style.display=\'none\'"></div>'
++'<div class="inf">'
++'<div class="nm">'+self.esc(p.name)+'</div>'
++'<div class="pr"><span class="prv">'+self.fmt(p.price)+'₽</span>'
++(ho?'<span class="old">'+self.fmt(p.old)+'₽</span>':'')
++(pct>0?'<span class="pct">-'+pct+'%</span>':'')
++'</div>'
++(pp?'<div class="pers">✨ '+self.fmt(pp)+'₽ для вас</div>':'')
++'</div></div>'
+}).join('')
 },
 
-prodCard(p){
-const img=(p.images&&p.images[0])||(p.image_urls&&p.image_urls[0])||'';
-const ho=p.old_price&&p.old_price>0;
-const dp=ho?Math.round((1-p.price/p.old_price)*100):0;
-let ph='';
-if(this.userDiscount&&this.userDiscount.total>0){ph=`<div class="pep">👤 ${Math.round(p.price*(1-this.userDiscount.total/100))}₽</div>`}
-return`<div class="pc" onclick="A.openProd(${p.id})"><img class="pi" src="${this.esc(img)}" alt="${this.esc(p.name)}" loading="lazy" onerror="this.style.display='none'"><div class="pf"><div class="pn">${this.esc(p.name)}</div><div class="pp"><span class="pr">${p.price}₽</span>${ho?`<span class="po">${p.old_price}₽</span>`:''}${dp>0?`<span class="dt">-${dp}%</span>`:''}</div>${ph}</div></div>`;
+togFav:function(id){
+var i=this.favs.indexOf(id);
+if(i>=0)this.favs.splice(i,1);else this.favs.push(id);
+this.svFav();this.rProds();
+if(this.cur&&this.cur.id===id)this.uDetFav();
+this.hap('success')
+},
+uDetFav:function(){
+var b=document.getElementById('dFv');if(!b||!this.cur)return;
+var f=this.favs.indexOf(this.cur.id)>=0;
+b.className='di-fv'+(f?' on':'');b.innerHTML=f?'❤️':'🤍'
 },
 
-async openProd(id){
-const p=this.products.find(x=>x.id===id);if(!p)return;
-this.curProd=p;
-const imgs=p.images||p.image_urls||[];
-const ho=p.old_price&&p.old_price>0;
-let di=null;
-if(this.uid()&&this.initData)di=await this.loadProdDisc(id);
-let dh='';
-if(di&&di.total>0){
-const d=di.details||{};
-dh=`<div class="ddi"><div class="ddt">🎁 Ваша персональная скидка</div>
-${d.first_order?`<div class="ddr"><span class="l">🎉 Первый заказ</span><span class="v">-${d.first_order}%</span></div>`:''}
-${d.referral?`<div class="ddr"><span class="l">👥 Реферальная</span><span class="v">-${d.referral}%</span></div>`:''}
-${d.review?`<div class="ddr"><span class="l">⭐ За отзывы</span><span class="v">-${d.review}%</span></div>`:''}
-${d.promo?`<div class="ddr"><span class="l">🎟 Промокод</span><span class="v">-${d.promo}%</span></div>`:''}
-${d.admin?`<div class="ddr"><span class="l">⭐ Персональная</span><span class="v">-${d.admin}%</span></div>`:''}
-<div class="ddr" style="font-weight:700;border-top:1px solid var(--border);padding-top:6px;margin-top:4px"><span>Итого</span><span class="v" style="font-size:16px">-${di.total}%</span></div>
-${di.final_price?`<div class="ddr" style="margin-top:4px"><span style="color:var(--gold);font-weight:700">💰 Ваша цена</span><span style="color:var(--gold);font-weight:700;font-size:18px">${di.final_price}₽</span></div>`:''}</div>`;
+openDet:function(id){
+var p=null;for(var i=0;i<this.products.length;i++)if(this.products[i].id===id){p=this.products[i];break}
+if(!p)return;
+this.cur=p;this.curQ=1;this.curI=0;
+var imgs=p.imgs,ho=p.old&&p.old>0,self=this;
+var d=this.disc,pp=d&&d.total>0?Math.round(p.price*(1-d.total/100)):null;
+var fav=this.favs.indexOf(p.id)>=0;
+var save=ho?p.old-p.price:0;
+
+var dh='';
+if(d&&d.total>0&&pp){
+dh='<div class="dsc-box">'
++'<div class="tt">✨ Ваша персональная скидка</div>'
++(d.referral>0?'<div class="dsc-r"><span class="l">👥 Реферальная</span><span class="v">-'+d.referral+'%</span></div>':'')
++(d.review>0?'<div class="dsc-r"><span class="l">⭐ За отзывы</span><span class="v">-'+d.review+'%</span></div>':'')
++(d.promo>0?'<div class="dsc-r"><span class="l">🎟 Промокод</span><span class="v">-'+d.promo+'%</span></div>':'')
++(d.admin>0?'<div class="dsc-r"><span class="l">✨ Персональная</span><span class="v">-'+d.admin+'%</span></div>':'')
++'<div class="dsc-r dsc-t"><span>Итого скидка</span><span class="v" style="font-size:14px">-'+d.total+'%</span></div>'
++'<div class="dsc-f"><span class="l">💰 Ваша цена</span><span class="v">'+self.fmt(pp)+'₽</span></div>'
++'</div>'
 }
-const det=document.getElementById('prodDetail');
-det.innerHTML=`<div class="di" id="dImgs"><div class="dc" onclick="A.closeProd()">✕</div><img src="${this.esc(imgs[0]||'')}" id="dMainImg" alt="" onerror="this.style.display='none'">${imgs.length>1?`<div class="ic" id="imgCnt">1/${imgs.length}</div><div class="ids" id="imgDots">${imgs.map((_,i)=>`<div class="ido ${i===0?'a':''}" onclick="A.setImg(${i})"></div>`).join('')}</div>`:''}</div>
-<div class="dbd"><div class="dn">${this.esc(p.name)}</div><div class="dd">${this.esc(p.description||'')}</div>
-<div class="dpr"><span class="dprc">${p.price}₽</span>${ho?`<span class="dpro">${p.old_price}₽</span>`:''}</div>${dh}
-<div class="qs"><button class="qb" onclick="A.chgQty(-1)">−</button><span class="qv" id="qtyVal">1</span><button class="qb" onclick="A.chgQty(1)">+</button></div>
-<button class="atc" onclick="A.addToCart()">🛒 В корзину</button></div>`;
-if(imgs.length>1)this.setupSwipe(imgs);
-document.getElementById('prodModal').classList.add('a');
-this.curQty=1;this.curImgIdx=0;this.prodImgs=imgs;
+
+document.getElementById('dSht').innerHTML=
+'<div class="sht-h"><span></span></div>'
++'<div class="di-w" id="dIW">'
++'<button class="di-cls" onclick="S.closeDet()">✕</button>'
++'<button class="di-fv'+(fav?' on':'')+'" id="dFv" onclick="event.stopPropagation();S.togFav('+p.id+')">'+(fav?'❤️':'🤍')+'</button>'
++'<img id="dIm" src="'+this.esc(imgs[0])+'" alt="" onerror="this.style.display=\'none\'">'
++(imgs.length>1?
+'<div class="di-dots" id="dDts">'+imgs.map(function(_,j){return'<button class="di-dot'+(j===0?' on':'')+'" onclick="S.setI('+j+')"></button>'}).join('')+'</div>'
++'<div class="di-arr"><button class="lt" onclick="S.prevI()">‹</button><button class="rt" onclick="S.nextI()">›</button></div>'
+:'')
++'</div>'
++'<div class="di-body">'
++'<div class="di-nm">'+this.esc(p.name)+'</div>'
++'<div class="di-desc">'+this.esc(p.desc)+'</div>'
++'<div class="di-prr">'
++'<span class="di-prv">'+this.fmt(p.price)+'₽</span>'
++(ho?'<span class="di-old">'+this.fmt(p.old)+'₽</span>':'')
++(save>0?'<span class="di-save">Выгода '+this.fmt(save)+'₽</span>':'')
++'</div>'
++dh
++'<div class="qt-row">'
++'<span class="qt-lbl">Количество</span>'
++'<div class="qt-ctrl">'
++'<button class="qt-b" onclick="S.chgQ(-1)">−</button>'
++'<span class="qt-v" id="qV">1</span>'
++'<button class="qt-b" onclick="S.chgQ(1)">+</button>'
++'</div></div>'
++'<button class="add-btn" onclick="S.addCart()">🛒 В корзину · <span id="aP">'+this.fmt(pp||p.price)+'₽</span></button>'
++'</div>';
+
+if(imgs.length>1){
+var w=document.getElementById('dIW');
+w.addEventListener('touchstart',function(e){S.tx=e.touches[0].clientX},{passive:true});
+w.addEventListener('touchend',function(e){var dx=S.tx-e.changedTouches[0].clientX;if(Math.abs(dx)>50){if(dx>0)S.nextI();else S.prevI()}},{passive:true})
+}
+document.getElementById('dOv').classList.add('op')
+},
+closeDet:function(){document.getElementById('dOv').classList.remove('op');this.cur=null},
+setI:function(i){
+var p=this.cur;if(!p)return;var imgs=p.imgs;
+if(i<0||i>=imgs.length)return;this.curI=i;
+var img=document.getElementById('dIm');
+if(img){img.style.opacity=0;setTimeout(function(){img.src=imgs[i];img.style.opacity=1},150)}
+var dots=document.querySelectorAll('#dDts .di-dot');
+for(var j=0;j<dots.length;j++)dots[j].classList.toggle('on',j===i)
+},
+prevI:function(){if(this.curI>0)this.setI(this.curI-1)},
+nextI:function(){if(this.cur&&this.curI<this.cur.imgs.length-1)this.setI(this.curI+1)},
+chgQ:function(d){
+this.curQ=Math.max(1,Math.min(99,this.curQ+d));
+document.getElementById('qV').textContent=this.curQ;
+this.uAddP()
+},
+uAddP:function(){
+var p=this.cur;if(!p)return;
+var d=this.disc,pp=d&&d.total>0?Math.round(p.price*(1-d.total/100)):p.price;
+document.getElementById('aP').textContent=this.fmt(pp*this.curQ)+'₽'
 },
 
-chgQty(d){this.curQty=Math.max(1,Math.min(99,this.curQty+d));const e=document.getElementById('qtyVal');if(e)e.textContent=this.curQty},
+addCart:function(){
+var p=this.cur;if(!p)return;
+var ex=null;for(var i=0;i<this.cart.length;i++)if(this.cart[i].id===p.id){ex=this.cart[i];break}
+if(ex)ex.qty+=this.curQ;
+else this.cart.push({id:p.id,name:p.name,price:p.price,img:p.imgs[0]||'',qty:this.curQ});
+this.svCart();this.uBadge();this.closeDet();
+this.toast('✅ '+p.name+' добавлен');this.hap('success')
+},
+rmCart:function(id){this.cart=this.cart.filter(function(c){return c.id!==id});this.svCart();this.rCart();this.uBadge()},
+uCartQ:function(id,d){
+var it=null;for(var i=0;i<this.cart.length;i++)if(this.cart[i].id===id){it=this.cart[i];break}
+if(!it)return;it.qty+=d;
+if(it.qty<=0){this.rmCart(id);return}
+this.svCart();this.rCart();this.uBadge()
+},
+uBadge:function(){
+var cnt=0;for(var i=0;i<this.cart.length;i++)cnt+=this.cart[i].qty;
+var b=document.getElementById('cBadge');
+b.textContent=cnt;b.style.display=cnt>0?'flex':'none';
+var cc=document.getElementById('cCnt');
+if(cc){cc.textContent=cnt;cc.style.display=cnt>0?'inline':'none'}
+},
+uDisc:function(){
+var d=this.disc,b=document.getElementById('dBanner'),p=document.getElementById('dPct'),hd=document.getElementById('hdTop');
+if(!d||d.total<=0){b.style.display='none';hd.classList.remove('hd');return}
+b.style.display='flex';p.textContent='-'+d.total+'%';hd.classList.add('hd')
+},
+openCart:function(){this.rCart();document.getElementById('cPan').classList.add('op')},
+closeCart:function(){document.getElementById('cPan').classList.remove('op')},
+rCart:function(){
+var ci=document.getElementById('cList'),cf=document.getElementById('cFt'),self=this;
+this.uBadge();
+if(!this.cart.length){
+ci.innerHTML='<div class="c-emp"><div class="i">🛒</div><div class="m">Корзина пуста</div><div class="s">Добавьте товары для оформления</div></div>';
+cf.style.display='none';return
+}
+ci.innerHTML=this.cart.map(function(it,i){
+return'<div class="c-it" style="animation-delay:'+i*.03+'s">'
++'<img src="'+self.esc(it.img)+'" alt="" onerror="this.style.display=\'none\'">'
++'<div class="inf">'
++'<div class="nm">'+self.esc(it.name)+'</div>'
++'<div class="pr">'+self.fmt(it.price*it.qty)+'₽</div>'
++'<div class="cts">'
++'<button class="qb" onclick="S.uCartQ('+it.id+',-1)">−</button>'
++'<span class="qv">'+it.qty+'</span>'
++'<button class="qb" onclick="S.uCartQ('+it.id+',1)">+</button>'
++'<button class="dl" onclick="S.rmCart('+it.id+')">🗑</button>'
++'</div></div></div>'
+}).join('');
 
-setImg(i){
-if(i<0||i>=this.prodImgs.length)return;this.curImgIdx=i;
-const img=document.getElementById('dMainImg');if(img)img.src=this.prodImgs[i];
-const c=document.getElementById('imgCnt');if(c)c.textContent=`${i+1}/${this.prodImgs.length}`;
-document.querySelectorAll('.ido').forEach((d,j)=>d.classList.toggle('a',j===i));
+var sub=0,cnt=0;
+for(var i=0;i<this.cart.length;i++){sub+=this.cart[i].price*this.cart[i].qty;cnt+=this.cart[i].qty}
+var d=this.disc,dc=d?d.total:0;
+var da=Math.round(sub*dc/100),tot=sub-da;
+document.getElementById('cSum').innerHTML=
+'<div class="r"><span>Товары ('+cnt+')</span><span>'+this.fmt(sub)+'₽</span></div>'
++(dc>0?'<div class="r d"><span>🎁 Скидка '+dc+'%</span><span>−'+this.fmt(da)+'₽</span></div>':'')
++'<div class="r tot"><span>Итого</span><span>'+this.fmt(tot)+'₽</span></div>';
+document.getElementById('oBtn').innerHTML='📦 Оформить · '+this.fmt(tot)+'₽';
+cf.style.display='block'
+},
+applyPm:function(){
+var inp=document.getElementById('pmInp'),c=(inp.value||'').trim();
+if(!c){this.toast('❌ Введите промокод');return}
+this.toast('✅ Промокод «'+c+'» применён!');inp.value='';this.hap('success')
 },
 
-setupSwipe(imgs){
-const c=document.getElementById('dImgs');if(!c)return;let sx=0;
-c.addEventListener('touchstart',e=>{sx=e.touches[0].clientX});
-c.addEventListener('touchend',e=>{const d=sx-e.changedTouches[0].clientX;if(Math.abs(d)>50){if(d>0&&this.curImgIdx<imgs.length-1)this.setImg(this.curImgIdx+1);else if(d<0&&this.curImgIdx>0)this.setImg(this.curImgIdx-1)}});
-},
-
-closeProd(){document.getElementById('prodModal').classList.remove('a');this.curProd=null},
-
-addToCart(){
-if(!this.curProd)return;
-const ex=this.cart.find(c=>c.id===this.curProd.id);
-if(ex)ex.qty+=this.curQty;
-else this.cart.push({id:this.curProd.id,name:this.curProd.name,price:this.curProd.price,image:(this.curProd.images||this.curProd.image_urls||[])[0]||'',qty:this.curQty});
-this.saveCart();this.updBadge();this.closeProd();this.toast(`✅ ${this.curProd.name} добавлен`);
-if(this.tg?.HapticFeedback)this.tg.HapticFeedback.notificationOccurred('success');
-},
-
-rmCart(id){this.cart=this.cart.filter(c=>c.id!==id);this.saveCart();this.renderCart();this.updBadge()},
-
-updCartQty(id,d){const it=this.cart.find(c=>c.id===id);if(!it)return;it.qty+=d;if(it.qty<=0){this.rmCart(id);return}this.saveCart();this.renderCart();this.updBadge()},
-
-saveCart(){try{localStorage.setItem('saturn_cart',JSON.stringify(this.cart))}catch(e){}},
-
-loadCart(){try{const s=localStorage.getItem('saturn_cart');if(s)this.cart=JSON.parse(s)}catch(e){this.cart=[]}this.updBadge()},
-
-updBadge(){const b=document.getElementById('cartBadge');const t=this.cart.reduce((s,c)=>s+c.qty,0);if(b){b.textContent=t;b.style.display=t>0?'flex':'none'}},
-
-openCart(){this.renderCart();document.getElementById('cartPanel').classList.add('o')},
-closeCart(){document.getElementById('cartPanel').classList.remove('o')},
-
-renderCart(){
-const c=document.getElementById('cartItems'),f=document.getElementById('cartFooter');
-if(!this.cart.length){c.innerHTML='<div class="ce"><div class="cei">🛒</div><div>Корзина пуста</div></div>';f.style.display='none';return}
-c.innerHTML=this.cart.map(it=>`<div class="ci"><img class="cig" src="${this.esc(it.image)}" alt="" onerror="this.style.display='none'"><div class="cii"><div class="cin">${this.esc(it.name)}</div><div class="cip">${it.price*it.qty}₽</div><div class="cic"><button class="cqb" onclick="A.updCartQty(${it.id},-1)">−</button><span>${it.qty}</span><button class="cqb" onclick="A.updCartQty(${it.id},1)">+</button><span class="cir" onclick="A.rmCart(${it.id})">🗑</span></div></div></div>`).join('');
-const sub=this.cart.reduce((s,c)=>s+c.price*c.qty,0);
-const disc=this.userDiscount?.total||0;
-const da=Math.round(sub*disc/100);
-const tot=sub-da;
-document.getElementById('cartSum').innerHTML=`<div class="csr"><span>Товары (${this.cart.reduce((s,c)=>s+c.qty,0)})</span><span>${sub}₽</span></div>${disc>0?`<div class="csr" style="color:var(--ok)"><span>🎁 Скидка ${disc}%</span><span>-${da}₽</span></div>`:''}<div class="csr t"><span>Итого</span><span>${tot}₽</span></div>`;
-f.style.display='block';
-},
-
-async applyPromo(){
-const inp=document.getElementById('promoInput');const code=(inp?.value||'').trim();
-if(!code){this.toast('❌ Введите промокод');return}
-const u=this.uid();if(!u||!this.initData){this.toast('⚠️ Авторизация не пройдена');return}
-try{
-const r=await this.apiReq('/api/promo/apply',{method:'POST',body:JSON.stringify({user_id:u,code})});
-const d=await r.json();
-if(d.success){this.toast(`✅ ${d.code} применён! -${d.discount}%`);if(d.discount_info){this.userDiscount=d.discount_info;this.updDiscBanner();this.renderCart();this.renderProds()}inp.value=''}
-else this.toast(`❌ ${d.error||'Ошибка'}`);
-}catch(e){this.toast('❌ Ошибка')}
-},
-
-async submitOrder(){
+order:function(){
 if(!this.cart.length)return;
-const u=this.uid();if(!u){this.toast('⚠️ Откройте через Telegram бот');return}
-const btn=document.getElementById('orderBtn');btn.disabled=true;btn.textContent='⏳ Оформление...';
+var self=this;
+var sub=0;
+for(var i=0;i<this.cart.length;i++)sub+=this.cart[i].price*this.cart[i].qty;
+var d=this.disc,dc=d?d.total:0;
+var da=Math.round(sub*dc/100);
+var tot=sub-da;
+
+/* Формируем текст сообщения */
+var lines=[];
+lines.push('Здравствуйте, хочу заказать:');
+lines.push('');
+for(var i=0;i<this.cart.length;i++){
+var it=this.cart[i];
+var itemTotal=it.price*it.qty;
+lines.push('• '+it.name+' — '+it.qty+' шт. × '+self.fmt(it.price)+'₽ = '+self.fmt(itemTotal)+'₽');
+}
+lines.push('');
+lines.push('Сумма: '+self.fmt(sub)+'₽');
+if(dc>0){
+lines.push('Скидка: '+dc+'% (−'+self.fmt(da)+'₽)');
+}
+lines.push('Итого к оплате: '+self.fmt(tot)+'₽');
+
+var msg=lines.join('\n');
+var encoded=encodeURIComponent(msg);
+var url='https://t.me/'+this.CHAT_USERNAME+'?text='+encoded;
+
+/* Открываем чат в Telegram */
 try{
-const sub=this.cart.reduce((s,c)=>s+c.price*c.qty,0);
-const disc=this.userDiscount?.total||0;
-const fin=Math.round(sub*(1-disc/100));
-this.tg.sendData(JSON.stringify({action:'order',items:this.cart.map(c=>({id:c.id,name:c.name,price:c.price,qty:c.qty})),total:sub,discount:disc,final_price:fin,discount_details:this.userDiscount?.details||{}}));
-this.cart=[];this.saveCart();this.updBadge();this.closeCart();this.toast('✅ Заказ отправлен!');
-if(this.tg?.HapticFeedback)this.tg.HapticFeedback.notificationOccurred('success');
-}catch(e){this.toast('❌ Ошибка')}finally{btn.disabled=false;btn.textContent='📦 Оформить заказ'}
+if(this.tg&&this.tg.openTelegramLink){
+this.tg.openTelegramLink(url);
+}else{
+window.open(url,'_blank');
+}
+}catch(e){
+window.open(url,'_blank');
+}
+
+/* Очищаем корзину */
+this.cart=[];this.svCart();this.uBadge();this.closeCart();
+this.toast('✅ Переход в чат для заказа');this.hap('success')
 },
 
-openProfile(){document.getElementById('profPanel').classList.add('o');this.renderProf()},
-closeProfile(){document.getElementById('profPanel').classList.remove('o')},
+openProf:function(){this.rProf();document.getElementById('pPan').classList.add('op')},
+closeProf:function(){document.getElementById('pPan').classList.remove('op')},
+rProf:function(){
+var bd=document.getElementById('pBd'),u=this.user,d=this.disc,self=this;
+if(!u){bd.innerHTML='<div class="emp"><div class="i">⚠️</div><div class="m">Данные недоступны</div></div>';return}
+var lvls={none:{l:'Нет',e:'⚪',c:'var(--hint)'},bronze:{l:'Бронза',e:'🥉',c:'#cd7f32'},silver:{l:'Серебро',e:'🥈',c:'#c0c0c0'},gold:{l:'Золото',e:'🥇',c:'var(--gold)'}};
+var lv=d?(lvls[d.ref_level]||lvls.none):lvls.none;
 
-renderProf(){
-const c=document.getElementById('profContent');const d=this.userDiscount,u=this.user;
-if(!u){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--hint)">⚠️ Данные недоступны</div>';return}
-const ln={none:'Нет уровня',bronze:'🥉 Бронза',silver:'🥈 Серебро',gold:'🥇 Золото'};
-c.innerHTML=`<div class="pcd"><h3>👤 ${this.esc(u.first_name||'Пользователь')}</h3>${u.username?`<div class="prw"><span class="l">Username</span><span class="v">@${this.esc(u.username)}</span></div>`:''}</div>
-${d?`<div class="pcd"><h3>🎁 Скидки</h3>
-<div class="prw"><span class="l">Общая скидка</span><span class="v" style="color:var(--gold);font-size:18px">${d.total}%</span></div>
-<div class="prw"><span class="l">👥 Уровень</span><span class="v">${ln[d.ref_level]||'Нет'}</span></div>
-<div class="prw"><span class="l">👥 Реферальная</span><span class="v">${d.referral}%</span></div>
-<div class="prw"><span class="l">⭐ Персональная</span><span class="v">${d.admin}%</span></div>
-<div class="prw"><span class="l">⭐ За отзывы</span><span class="v">${d.review}%</span></div>
-<div class="prw"><span class="l">🎟 Промокод</span><span class="v">${d.promo}%</span></div>
-${d.promo_code?`<div class="prw"><span class="l">Код</span><span class="v">${this.esc(d.promo_code)}</span></div>`:''}
-${!d.first_order_used?'<div style="margin-top:8px;padding:8px;background:rgba(76,175,80,.1);border-radius:8px;font-size:13px;color:var(--ok)">🎉 Скидка на первый заказ доступна!</div>':''}</div>
-<div class="pcd"><h3>🏆 Реферальная программа</h3><div class="prw"><span class="l">Друзей</span><span class="v">${d.ref_count||0}</span></div>
-<div style="margin-top:8px;font-size:12px;color:var(--hint)">🥉 1+ друг • 🥈 5+ друзей • 🥇 10+ друзей</div></div>`:'<div class="pcd"><div style="text-align:center;color:var(--hint)">Загрузка...</div></div>'}`;
+bd.innerHTML=
+'<div class="p-cd usr">'
++'<div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">'
++'<div class="p-av">👤</div>'
++'<div style="flex:1;min-width:0">'
++'<div style="font-size:17px;font-weight:800;margin-bottom:1px">'+this.esc(u.first_name)+'</div>'
++(u.username?'<div style="font-size:12.5px;color:var(--hint)">@'+this.msk(u.username)+'</div>':'')
++'</div>'
++(lv.e!=='⚪'?'<div style="font-size:28px">'+lv.e+'</div>':'')
++'</div>'
++'<div class="id-bx">'
++'<span class="sh">🛡</span>'
++'<span class="lb">Защищённый ID</span>'
++'<span class="vl">'+this.hid(u.id)+'</span>'
++'<button class="cp" onclick="S.cpId()">📋</button>'
++'</div>'
++'</div>'
+
++(d?
+'<div class="p-cd">'
++'<h3>🎁 Ваши скидки</h3>'
++'<div class="dsc-big"><div class="lb">Общая скидка</div><div class="vl">'+d.total+'%</div></div>'
++'<div class="dd-r"><span class="l'+(d.referral>0?'':' off')+'">👥 Реферальная</span><span class="v'+(d.referral>0?' ok':' off')+'">'+(d.referral>0?d.referral+'%':'—')+'</span></div>'
++'<div class="dd-r"><span class="l'+(d.review>0?'':' off')+'">⭐ За отзывы</span><span class="v'+(d.review>0?' ok':' off')+'">'+(d.review>0?d.review+'%':'—')+'</span></div>'
++'<div class="dd-r"><span class="l'+(d.promo>0?'':' off')+'">🎟 Промокод'+(d.promo_code?' ('+this.esc(d.promo_code)+')':'')+'</span><span class="v'+(d.promo>0?' ok':' off')+'">'+(d.promo>0?d.promo+'%':'—')+'</span></div>'
++'<div class="dd-r"><span class="l'+(d.admin>0?'':' off')+'">✨ Персональная</span><span class="v'+(d.admin>0?' ok':' off')+'">'+(d.admin>0?d.admin+'%':'—')+'</span></div>'
++(!d.first_order_used?'<div class="fh">🎉 <span>Скидка на первый заказ доступна!</span></div>':'')
++'</div>'
+
++'<div class="p-cd">'
++'<h3>🏆 Реферальная программа</h3>'
++'<div class="rf-st">'
++'<div class="rf-s"><div class="lb">Уровень</div><div class="lv" style="color:'+lv.c+'">'+lv.e+' '+lv.l+'</div></div>'
++'<div class="rf-s"><div class="lb">Друзей</div><div class="vl">'+d.ref_count+'</div></div>'
++'</div>'
++[{l:'🥉 Бронза',r:1},{l:'🥈 Серебро',r:5},{l:'🥇 Золото',r:10}].map(function(lx,i){
+var pct=Math.min(100,d.ref_count/lx.r*100),dn=d.ref_count>=lx.r;
+return'<div class="prg-r">'
++'<div class="tp"><span class="l'+(dn?' dn':'')+'">'+lx.l+'</span><span class="r'+(dn?' dn':'')+'">'+Math.min(d.ref_count,lx.r)+'/'+lx.r+'</span></div>'
++'<div class="prg-b"><div class="prg-f'+(dn?' ok':' ac')+'" id="pg'+i+'" style="width:0"></div></div>'
++'</div>'
+}).join('')
++'</div>'
+:'')
+
++'<div class="p-cd">'
++'<h3>📦 Мои заказы</h3>'
++'<div style="text-align:center;padding:18px 0;color:var(--hint)">'
++'<div style="font-size:28px;margin-bottom:6px">📋</div>'
++'<div style="font-size:12.5px">История заказов доступна в боте</div>'
++'</div></div>';
+
+if(d){
+setTimeout(function(){
+[{r:1},{r:5},{r:10}].forEach(function(lx,i){
+var el=document.getElementById('pg'+i);
+if(el)el.style.width=Math.min(100,d.ref_count/lx.r*100)+'%'
+})
+},400)
+}
 },
-
-updDiscBanner(){
-const b=document.getElementById('discBanner'),t=document.getElementById('discText'),p=document.getElementById('discPct');
-if(!this.userDiscount||this.userDiscount.total<=0){if(b)b.style.display='none';return}
-if(b)b.style.display='flex';if(t)t.textContent='Ваша персональная скидка';if(p)p.textContent=`-${this.userDiscount.total}%`;
-},
-
-setCat(s){this.activeCat=s;this.renderCats();this.renderProds()},
-
-toast(m){const t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('s');setTimeout(()=>t.classList.remove('s'),2500)},
-
-showErr(m){document.body.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:20px;color:var(--no)"><div><div style="font-size:60px;margin-bottom:16px">⚠️</div><div style="font-size:18px;font-weight:700">${this.esc(m)}</div></div></div>`},
-
-esc(t){if(!t)return'';const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'};return String(t).replace(/[&<>"']/g,c=>m[c])}
+cpId:function(){
+if(!this.user)return;
+var id=this.hid(this.user.id);
+try{navigator.clipboard.writeText(id)}catch(e){}
+this.toast('📋 ID скопирован: '+id)
+}
 };
 
-function filterProducts(){A.renderProds()}
-function openCart(){A.openCart()}
-function closeCart(){A.closeCart()}
-function openProfile(){A.openProfile()}
-function closeProfile(){A.closeProfile()}
-function applyPromo(){A.applyPromo()}
-function submitOrder(){A.submitOrder()}
-document.getElementById('prodModal')?.addEventListener('click',function(e){if(e.target===this)A.closeProd()});
-document.addEventListener('DOMContentLoaded',()=>A.init());
+document.addEventListener('DOMContentLoaded',function(){S.init()});
 </script>
 </body>
 </html>
