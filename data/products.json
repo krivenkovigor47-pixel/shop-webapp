@@ -1,3 +1,20 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": 1,
+      "name": "🎧 Air pods PRO 3",
+      "desc": "✨ ХАРАКТЕРИСТИКИ  \n🎧 Чип JL — даёт лучшее качество звука в своём сегменте 🔥  \n\n✅ 1. Шумоподавление  \n✅ 2. Прозрачность\n✅ 3. Измерение пульса\n✅ 4. Гироскоп\n✅ 5. Локатор\n✅ 6. Все анимации\n✅ 7. Гравировки на наушниках и кейсе\n\n👀 КОМПЛЕКТАЦИЯ  \n\n📦 ЗАВОДСКОЙ КОМПЛЕКТ  \n✅ Наушники + кейс  \n✅ Инструкция  \n✅ Сменные амбушюры\n\n💝 БОНУС ОТ НАС  \n➕ Блок питания 20W   \n➕ Провод Type‑C   \n➕ Фирменный 3D‑стикер",
+      "price": 1900,
+      "cat": "electronics",
+      "images": [
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_1.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_2.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_3.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_4.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_5.jpg"
+      ],
+      "old_price": 2300,
+      "badge": "NEW"
+    }
+  ]
 }
