@@ -1,6 +1,14 @@
 {
   "categories": [
     {"slug": "clothes", "name": "Одежда", "emoji": "👕"},
-    {"slug": "shoes", "name": "Обувь", "emoji": "👟"}
+    {"slug": "shoes", "name": "Обувь", "emoji": "👟"},
+    {"slug": "accessories", "name": "Аксессуары", "emoji": "⌚"},
+    {"slug": "electronics", "name": "Электроника", "emoji": "📱"},
+    {"slug": "home", "name": "Бытовые", "emoji": "🏠"},
+    {"slug": "beauty", "name": "Красота", "emoji": "💄"},
+    {"slug": "sports", "name": "Спорт", "emoji": "⚽"},
+    {"slug": "kids", "name": "Детское", "emoji": "🧸"},
+    {"slug": "food", "name": "Еда", "emoji": "🍕"},
+    {"slug": "other", "name": "Другое", "emoji": "📦"}
   ]
 }
