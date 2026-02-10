@@ -1,3 +1,14 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": 1,
+      "name": "Перчатки",
+      "desc": "Перчатки топ",
+      "price": 450,
+      "cat": "clothes",
+      "images": [
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_1_1.jpg"
+      ]
+    }
+  ]
 }
