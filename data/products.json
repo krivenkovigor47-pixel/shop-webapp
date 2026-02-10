@@ -1,7 +1,3 @@
 {
-  "categories": [
-    {"slug": "clothes", "name": "Одежда", "emoji": "👕"},
-    {"slug": "shoes", "name": "Обувь", "emoji": "👟"},
-    {"slug": "accessories", "name": "Аксессуары", "emoji": "⌚"}
-  ]
+  "categories": []
 }
