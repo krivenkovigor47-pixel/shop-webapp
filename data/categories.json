@@ -1,0 +1,7 @@
+{
+  "categories": [
+    {"id": "phones", "slug": "phones", "name": "Телефоны", "emoji": "📱"},
+    {"id": "laptops", "slug": "laptops", "name": "Ноутбуки", "emoji": "💻"},
+    {"id": "accessories", "slug": "accessories", "name": "Аксессуары", "emoji": "🎧"}
+  ]
+}
