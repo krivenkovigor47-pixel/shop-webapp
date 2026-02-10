@@ -1,4 +1,16 @@
 {
- "products": [],
- "categories": []
+  "products": [
+    {
+      "id": 1,
+      "name": "iPhone 15 Pro Max",
+      "desc": "Новый флагман Apple",
+      "price": 89990,
+      "old_price": 109990,
+      "cat": "phones",
+      "badge": "Хит",
+      "images": [
+        "https://raw.githubusercontent.com/ВАШ_ЮЗЕР/saturn-shop/main/images/product_1.jpg"
+      ]
+    }
+  ]
 }
