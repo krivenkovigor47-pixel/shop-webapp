@@ -31,6 +31,21 @@
       ],
       "old_price": 500,
       "badge": "New"
+    },
+    {
+      "id": 3,
+      "name": "Перчатки Nike Thermo-Fit Academy 2.0",
+      "desc": "🧤 Nike Thermo-Fit 2.0 Academy ❄️\n\n💎 Характеристики:\n— Модель: Thermo-Fit 2.0 Academy\n— Качество: Premium LUX ✨\n— Размер: One Size (Универсальный) 📏\n— Материал: Технологичный термофлис 🌡\n— Сезон: Осень / Зима 🧊\n\n✅ Особенности модели:\n\n• 📱 Touch Screen: Специальное покрытие на пальцах — управляй смартфоном, не снимая перчаток.\n• 🧤 Perfect Grip: Силиконовые насечки на ладонях для мертвого хваста.\n• 🛡 Heavy Duty: Износостойкий логотип, который не боится стирок и активной носки.\n\n🎁 Расширенная комплектация:\n\n1. Перчатки Nike 🧤\n2. Фирменный 3D стикер🏷\n3. Брендовые носки Nike (В ПОДАРОК!) 🧦🎁",
+      "price": 390,
+      "cat": "clothes",
+      "images": [
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_1.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_2.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_3.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_4.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_5.jpg"
+      ],
+      "old_price": 500
     }
   ]
 }
