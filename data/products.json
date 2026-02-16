@@ -30,6 +30,21 @@
         "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_3_5.jpg"
       ],
       "old_price": 500
+    },
+    {
+      "id": 4,
+      "name": "Перчатки Nike Academy Hyperwarm",
+      "desc": "💎 Характеристики:\n— Модель: Nike Academy Hyperwarm \n— Качество: LUX\n— Размеры: One size \n— Цвет: Чёрный\n— Материал: Теплый эластичный термофлис\n— Сезон: Осень / Зима\n\n✅ Особенности:\n• Технология Touch Screen: специальное покрытие для работы с телефоном.\n• Reflective: светоотражающий логотип и вставки.\n• Сцепление: силиконовые насечки на ладонях для лучшего хвата.\n\n📦Расширенная комплектация:\n1. Перчатки Nike\n2. Фирменный 3D стикер\n3. Брендовые носки Nike (Бесплатно к заказу)",
+      "price": 390,
+      "cat": "clothes",
+      "images": [
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_4_1.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_4_2.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_4_3.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_4_4.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_4_5.jpg"
+      ],
+      "old_price": 500
     }
   ]
 }
