@@ -60,6 +60,21 @@
         "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_5_5.jpg"
       ],
       "old_price": 1990
+    },
+    {
+      "id": 6,
+      "name": "AirPods Max 2-поколения",
+      "desc": "⚠️ХАРАКТЕРИСТИКИ \n🛡Чип Airoha 1561M (Максимальное соответствие оригиналу , снаружи и вне  ) \n\n• Шумоподавление \n• Прозрачность \n• Гироскоп\n• Type-c \n• Локатор \n• Все анимации \n• Гравировки на наушниках и кейсе \n\n\nКОМПЛЕКТАЦИЯ \n\n📦 ЗАВОДСКОЙ КОМПЛЕКТ \n✔️ наушники+кейс \n✔️ инструкции \n✔️ сменные амбушюры \n\n🎁 БОНУС ОТ НАС \nБлок питания 20W\nФирменный 3Д стикер",
+      "price": 7790,
+      "cat": "electronics",
+      "images": [
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_6_1.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_6_2.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_6_3.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_6_4.jpg",
+        "https://raw.githubusercontent.com/krivenkovigor47-pixel/shop-webapp/main/images/product_6_5.jpg"
+      ],
+      "old_price": 8990
     }
   ]
 }
